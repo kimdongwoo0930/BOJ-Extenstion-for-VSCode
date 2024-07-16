@@ -11,7 +11,7 @@ export function activate(context: vscode.ExtensionContext) {
   // 콘솔을 사용하여 진단 정보(console.log) 및 오류(console.error)를 출력합니다
   // 이 코드 라인은 내선번호가 활성화될 때 한 번만 실행됩니다
   console.log(
-    'Congratulations, your extension "boj-extension-for-vscode" is now active!'
+    "익스텐션이 실행되었습니다."
   );
 
   // package.json 파일에 명령이 정의되었습니다
@@ -30,7 +30,10 @@ export function activate(context: vscode.ExtensionContext) {
 
   context.subscriptions.push(disposable);
 
-  // 문제 가져올때 실행될 명령어 함수
+  /**
+   * 문제 번호를 통해서 가져오는 커멘드 함수\
+   * Description : 
+   */
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "boj-extension-for-vscode.getProblemByNumber",
@@ -49,7 +52,7 @@ export function activate(context: vscode.ExtensionContext) {
               // 먼저 입력받은 값의 검증해야한다.
               if (ProblemNumberInputValidation(problemNumber)) {
                 // 입력받은 문제가 존재하는지 여부 확인 함수
-				console.log(`함수 결과: ${await checkProblemNumber(problemNumber)}`)
+				// console.log(`함수 결과: ${await checkProblemNumber(problemNumber)}`)
                 if (await checkProblemNumber(problemNumber)) {
                   // 만약 문제가 존재한다면 이제 사용할 언어의 확장자를 입력받아야한다.
                   const getInputLanguage = () => {
