@@ -1,48 +1,46 @@
-# Welcome to your VS Code Extension
+# VS 코드 확장에 오신 것을 환영합니다
 
-## What's in the folder
+## 폴더에 있는 내용
 
-* This folder contains all of the files necessary for your extension.
-* `package.json` - this is the manifest file in which you declare your extension and command.
-  * The sample plugin registers a command and defines its title and command name. With this information VS Code can show the command in the command palette. It doesn’t yet need to load the plugin.
-* `src/extension.ts` - this is the main file where you will provide the implementation of your command.
-  * The file exports one function, `activate`, which is called the very first time your extension is activated (in this case by executing the command). Inside the `activate` function we call `registerCommand`.
-  * We pass the function containing the implementation of the command as the second parameter to `registerCommand`.
+- 이 폴더에는 확장에 필요한 모든 파일이 들어 있습니다.
+- "package.json" - 확장자와 명령어를 선언하는 매니페스트 파일입니다.
+  - 샘플 플러그인은 명령어를 등록하고 해당 명령어의 제목과 명령어 이름을 정의합니다. 이 정보로 VS Code는 명령어 팔레트에 명령어를 표시할 수 있습니다. 아직 플러그인을 로드할 필요가 없습니다.
+- 'src/extension.ts' - 명령 구현을 제공할 메인 파일입니다.
+  - 파일은 activate라는 하나의 기능을 내보냅니다. activate 기능 안에서는 register Command라고 부릅니다.
+  - 명령의 구현이 포함된 함수를 두 번째 매개 변수인 'register Command'로 전달합니다.
 
-## Setup
+## 설정
 
-* install the recommended extensions (amodio.tsl-problem-matcher, ms-vscode.extension-test-runner, and dbaeumer.vscode-eslint)
+- 권장 확장(amodio.tsl-problem-matcher, ms-vscode.extension-test-runner, dbaemer.vscode-eslint)을 설치합니다
 
+## 바로 실행하기
 
-## Get up and running straight away
+- F5를 눌러 내선번호가 로드된 새 창을 엽니다.
+- 명령 팔레트에서 ('Ctrl+Shift+P' 또는 'Cmd+Shift+P'를 Mac에서) 누르고 Hello World를 입력하여 명령을 실행합니다.
+- 코드의 'src/extension.ts' 내에서 중단점을 설정하여 확장을 디버깅합니다.
+- 디버그 콘솔에서 확장에서 출력을 찾습니다.
 
-* Press `F5` to open a new window with your extension loaded.
-* Run your command from the command palette by pressing (`Ctrl+Shift+P` or `Cmd+Shift+P` on Mac) and typing `Hello World`.
-* Set breakpoints in your code inside `src/extension.ts` to debug your extension.
-* Find output from your extension in the debug console.
+## 변경합니다
 
-## Make changes
+- 'src/extension.ts'에서 코드를 변경한 후 디버그 도구 모음에서 확장을 다시 시작할 수 있습니다.
+- 또한 내선번호와 함께 VS Code 창을 새로고침('Ctrl+R' 또는 'Cmd+R')하여 변경사항을 로드할 수 있습니다.
 
-* You can relaunch the extension from the debug toolbar after changing code in `src/extension.ts`.
-* You can also reload (`Ctrl+R` or `Cmd+R` on Mac) the VS Code window with your extension to load your changes.
+## API 탐색
 
+- 'node_modules/@type/vscode/index.d.ts' 파일을 열면 API 전체 집합을 열 수 있습니다.
 
-## Explore the API
+## 테스트 실행
 
-* You can open the full set of our API when you open the file `node_modules/@types/vscode/index.d.ts`.
+- [Extension Test Runner] 설치(https://marketplace.visualstudio.com/items?itemName=ms-vscode.extension-test-runner)
+- **Tasks:RunTask** 명령을 통해 "Watch" 작업을 실행합니다. 이 작업이 실행 중인지 확인하거나 테스트가 검색되지 않을 수 있습니다.
+- 활동 표시줄에서 Testing 보기를 열고 Run Test(테스트 실행) 버튼을 클릭하거나 'Ctrl/Cmd +; A' 키를 사용합니다
+- Test Results(테스트 결과) 보기에서 테스트 결과의 출력을 참조하십시오.
+- 'src/test/extension.test.ts'를 변경하거나 'test' 폴더 내에 새 테스트 파일을 만듭니다.
+  - 제공되는 테스트 러너는 이름 패턴 '\*\*.test.ts'와 일치하는 파일만 고려합니다.
+  - 'test' 폴더 내에 폴더를 만들어 원하는 방식으로 테스트를 구성할 수 있습니다.
 
-## Run tests
+## 더 나아가기
 
-* Install the [Extension Test Runner](https://marketplace.visualstudio.com/items?itemName=ms-vscode.extension-test-runner)
-* Run the "watch" task via the **Tasks: Run Task** command. Make sure this is running, or tests might not be discovered.
-* Open the Testing view from the activity bar and click the Run Test" button, or use the hotkey `Ctrl/Cmd + ; A`
-* See the output of the test result in the Test Results view.
-* Make changes to `src/test/extension.test.ts` or create new test files inside the `test` folder.
-  * The provided test runner will only consider files matching the name pattern `**.test.ts`.
-  * You can create folders inside the `test` folder to structure your tests any way you want.
-
-## Go further
-
-* Reduce the extension size and improve the startup time by [bundling your extension](https://code.visualstudio.com/api/working-with-extensions/bundling-extension).
-* [Publish your extension](https://code.visualstudio.com/api/working-with-extensions/publishing-extension) on the VS Code extension marketplace.
-* Automate builds by setting up [Continuous Integration](https://code.visualstudio.com/api/working-with-extensions/continuous-integration).
+- [내선번호 묶음](https://code.visualstudio.com/api/working-with-extensions/bundling-extension) )을 통해 확장 크기를 줄이고 시작 시간을 개선합니다.
+- [내선번호 공개하기](https://code.visualstudio.com/api/working-with-extensions/publishing-extension) 를 VS코드 내선번호 마켓플레이스에 게시합니다.
+- [Continuous Integration](https://code.visualstudio.com/api/working-with-extensions/continuous-integration) 을 설정하여 빌드를 자동화합니다.
