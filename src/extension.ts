@@ -49,6 +49,7 @@ export function activate(context: vscode.ExtensionContext) {
               // 먼저 입력받은 값의 검증해야한다.
               if (ProblemNumberInputValidation(problemNumber)) {
                 // 입력받은 문제가 존재하는지 여부 확인 함수
+				console.log(`함수 결과: ${await checkProblemNumber(problemNumber)}`)
                 if (await checkProblemNumber(problemNumber)) {
                   // 만약 문제가 존재한다면 이제 사용할 언어의 확장자를 입력받아야한다.
                   const getInputLanguage = () => {
