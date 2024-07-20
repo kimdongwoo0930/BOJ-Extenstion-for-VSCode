@@ -3,8 +3,9 @@
 import * as vscode from "vscode";
 import { checkProblemNumber } from "./utils/checkProblemNumber";
 import { ProblemNumberInputValidation } from "./utils/validation";
-import { todo } from "node:test";
+
 import { getProblem } from "./commands/getProblemByNumber";
+import { checkTestCase } from "./commands/checkTestCase";
 
 // 확장이 활성화되면 이 메서드가 호출됩니다
 // 명령이 처음 실행될 때 확장이 활성화됩니다
@@ -88,6 +89,15 @@ export function activate(context: vscode.ExtensionContext) {
         };
         // 함수 실행
         getProblemByNumber();
+      }
+    )
+  );
+  // 테스트하기
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "boj-extension-for-vscode.checkTestCase",
+      () => {
+        checkTestCase(context);
       }
     )
   );

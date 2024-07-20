@@ -14,12 +14,12 @@
   "contributes": {
     "commands": [
       {
-        "command": "boj-extension-for-vscode.helloWorld",
-        "title": "BOJ: Hello World"
+        "command": "boj-extension-for-vscode.getProblemByNumber",
+        "title": "BOJ: 문제 가져오기"
       },
       {
-        "command": "boj-extension-for-vscode.getProblemByNumber",
-        "title": "BOJ: Get problem by number"
+        "command": "boj-extension-for-vscode.checkTestCase",
+        "title": "BOJ: 테스트"
       }
     ]
   },
@@ -55,6 +55,7 @@
     "bufferutil": "^4.0.8",
     "canvas": "^2.11.2",
     "cheerio": "^1.0.0-rc.12",
+    "child_process": "^1.0.2",
     "jsdom": "^24.1.0",
     "rss-parser": "^3.13.0",
     "utf-8-validate": "^6.0.4",
