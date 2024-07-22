@@ -1,7 +1,7 @@
 // 모듈 'vscode'에 VS 코드 확장성 API가 포함되어 있습니다
 // 모듈을 가져와 아래 코드의 별칭 vscode와 함께 참조합니다
 import * as vscode from "vscode";
-import { checkProblemNumber } from "./utils/checkProblemNumber";
+// import { checkProblemNumber } from './utils/checkProblemNumber';
 import { ProblemNumberInputValidation } from "./utils/validation";
 
 import { getProblem } from "./commands/getProblemByNumber";
@@ -83,7 +83,6 @@ export function activate(context: vscode.ExtensionContext) {
                 getInputLanguage();
               } else {
                 vscode.window.showErrorMessage("올바른 번호를 입력해주세요.");
-                getProblemByNumber();
               }
             });
         };

@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <base href="https://www.acmicpc.net"> <!-- base url 설정 -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
+  <title>수열 정렬</title>
+  <link rel="stylesheet" href="https://ddo7jzca0m2vt.cloudfront.net/css/problem-font.css?version=20230101">
+  <link rel="stylesheet" href="https://ddo7jzca0m2vt.cloudfront.net/unify/css/custom.css?version=20230101">
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; padding: 20px; margin: 0; }
+    h1, h2, h3 { margin-top: 30px; }
+    h1 { font-size: 28px; }
+    h2 { font-size: 24px; }
+    h3 { font-size: 20px; }
+    
+        code { background-color: #2e2e2e; padding: 2px 4px; border-radius: 4px; }
+        pre {
+          background-color: #2e2e2e;
+          color: white;
+          font-size: 14px;
+        }
+      
+    .problem-section { margin-bottom: 30px; }
+    .problem-text p { margin: 0; }
+    .problem-text a { color: #007bff; }
+    .problem-io { margin-top: 20px; }
+    .problem-io h3 { font-size: 20px; }
+    .sample-container {
+      display: flex;
+      gap: 16px; /* 예제와 예제 사이의 간격 설정 (원하는 크기로 조정) */
+    }
+    .sample-box {
+      flex: 1; /* 박스가 꽉 차도록 설정 */
+    }
+    .hidden {
+      display: none;
+    }
+  </style>
+  <script>
+    function updateTheme() {
+      const theme = {"theme":2};
+      vscode.postMessage(theme);
+    }            
+    function getLocalResourceUri(resourcePath) {
+      const onDiskPath = vscode.Uri.file(path.join(context.extensionPath, resourcePath));
+      const srcUri = panel.webview.asWebviewUri(onDiskPath);
+      return srcUri;
+    }
+  </script>
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {inlineMath: [['$','$'], ['$begin:math:text$','\$end:math:text$']]}
+    });
+  </script>
+  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+</head>
+<body>
+  <h1 style="display:inline">
+    수열 정렬
+  </h1>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <h3 style="display:inline">
+  </h3>
+  <br>
+  <table>
+    <thead><tr><th style="width:16%;">시간 제한</th><th style="width:16%;">메모리 제한</th><th style="width:17%;">제출</th><th style="width:17%;">정답</th><th style="width:17%;">맞힌 사람</th><th style="width:17%;">정답 비율</th></tr></thead><tbody><tr><td>2 초 </td><td>128 MB</td><td>15854</td><td>8429</td><td>7290</td><td>56.051%</td></tr></tbody>
+  </table>
+  <section id="description" class="problem-section">
+    <div class="headline">
+      <h2>문제</h2>
+    </div>
+    <div id="problem_description" class="problem-text">
+      
+<p>P[0], P[1], ...., P[N-1]은 0부터 N-1까지(포함)의 수를 한 번씩 포함하고 있는 수열이다. 수열 P를 길이가 N인 배열 A에 적용하면 길이가 N인 배열 B가 된다. 적용하는 방법은 B[P[i]] = A[i]이다.</p>
+
+<p>배열 A가 주어졌을 때, 수열 P를 적용한 결과가 비내림차순이 되는 수열을 찾는 프로그램을 작성하시오. 비내림차순이란, 각각의 원소가 바로 앞에 있는 원소보다 크거나 같을 경우를 말한다. 만약 그러한 수열이 여러개라면 사전순으로 앞서는 것을 출력한다.</p>
+
+
+    </div>
+  </section>
+
+  <section id="input" class="problem-section">
+    <div class="headline">
+      <h2>입력</h2>
+    </div>
+    <div id="problem_input" class="problem-text">
+      
+<p>첫째 줄에 배열 A의 크기 N이 주어진다. 둘째 줄에는 배열 A의 원소가 0번부터 차례대로 주어진다. N은 50보다 작거나 같은 자연수이고, 배열의 원소는 1,000보다 작거나 같은 자연수이다.</p>
+
+
+    </div>
+  </section>
+
+  <section id="output" class="problem-section">
+    <div class="headline">
+      <h2>출력</h2>
+    </div>
+    <div id="problem_output" class="problem-text">
+      
+<p>첫째 줄에 비내림차순으로 만드는 수열 P를 출력한다.</p>
+
+
+    </div>
+  </section>
+
+  <div id="limit" class="problem-section hidden"></div>
+
+  <section id="sample-IOs" class="problem-section">
+    
+      <div class="sample-container">
+        <div class="sample-box">
+          <h2>예제 입력 1</h2>
+          <pre class="sampledata">3
+2 3 1
+</pre>
+        </div>
+        <div class="sample-box">
+          <h2>예제 출력 1</h2>
+          <pre class="sampledata">1 2 0
+</pre>
+        </div>
+      </div>
+      
+    
+      <div class="sample-container">
+        <div class="sample-box">
+          <h2>예제 입력 2</h2>
+          <pre class="sampledata">4
+2 1 3 1
+</pre>
+        </div>
+        <div class="sample-box">
+          <h2>예제 출력 2</h2>
+          <pre class="sampledata">2 0 3 1
+</pre>
+        </div>
+      </div>
+      
+    
+      <div class="sample-container">
+        <div class="sample-box">
+          <h2>예제 입력 3</h2>
+          <pre class="sampledata">8
+4 1 6 1 3 6 1 4
+</pre>
+        </div>
+        <div class="sample-box">
+          <h2>예제 출력 3</h2>
+          <pre class="sampledata">4 0 6 1 3 7 2 5
+</pre>
+        </div>
+      </div>
+      
+    
+  </section>
+
+  <div id="hint" class="problem-section hidden"></div>
+
+  
+    <section id="source" class="problem-section">
+      <div id="source" class="problem-text">
+        <div class="headline"><h2>출처</h2></div><ul><li>문제를 번역한 사람:&nbsp;<a href="/user/baekjoon">baekjoon</a></li><li>잘못된 조건을 찾은 사람:&nbsp;<a href="/user/dareka">dareka</a></li></ul>
+      </div>
+    </section>
+</body>
+</html>

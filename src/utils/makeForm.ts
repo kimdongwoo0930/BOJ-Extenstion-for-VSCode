@@ -203,18 +203,21 @@ export const juseokForm = (lang: string, problemData: problemData, number: strin
 #   ${number}번: ${problemData.title}                   
 #   @date:   ${date}              
 #   @link:   https://www.acmicpc.net/problem/${number}  
+#   @Motd:   폴더 내부에 있는 파일을 삭제하지 말아주세요.
+#   @method: 코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 #=====================================================================
 
-inputs = input()
-
-
+T = input()
 `;
+        // =======================================================================================================
     } else if (lang === 'cpp') {
         // c++ 시작 tool
         return `//=====================================================================
 //   ${number}번: ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
+//   @Motd:   폴더 내부에 있는 파일을 삭제하지 말아주세요.
+//   @method: 코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 //=====================================================================
 
 #include <iostream>
@@ -231,12 +234,13 @@ int main() {
 //   ${number}번: ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
+//   @Motd:   폴더 내부에 있는 파일을 삭제하지 말아주세요.
+//   @method: 코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 //=====================================================================
 
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
-
   public static void main(String[] args) {
     Scanner sc = new Scanner(System.in);
   }
@@ -249,6 +253,8 @@ public class Main {
 //   ${number}번: ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
+//   @Motd:   폴더 내부에 있는 파일을 삭제하지 말아주세요.
+//   @method: 코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 //=====================================================================
 
 #include <stdio.h>
@@ -266,6 +272,8 @@ int main() {
 //   ${number}번: ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
+//   @Motd:   폴더 내부에 있는 파일을 삭제하지 말아주세요.
+//   @method: 코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 //=====================================================================
 
 
