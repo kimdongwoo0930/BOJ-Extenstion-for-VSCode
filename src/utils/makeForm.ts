@@ -1,9 +1,15 @@
-import * as vscode from 'vscode';
-import { problemData } from '../types/problemData';
+import * as vscode from "vscode";
+import { problemData } from "../types/problemData";
+import * as os from "os";
 
 // 가져온 정보들을 백준 온라인 폼으로 보여주기위해 바꿔준다.
+/**
+ *
+ * @Title 백준 Html 폼
+ * @param problemData 문제 데이터
+ */
 export const ProblemHtmlForm = (problemData: problemData) => {
-    return `
+  return `
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -94,8 +100,8 @@ export const ProblemHtmlForm = (problemData: problemData) => {
   </section>
 
   ${
-      problemData.limit!.trim() !== ''
-          ? `
+    problemData.limit!.trim() !== ""
+      ? `
     <section id="limit" class="problem-section">
       <div class="headline">
         <h2>제한</h2>
@@ -105,13 +111,13 @@ export const ProblemHtmlForm = (problemData: problemData) => {
       </div>
     </section>
     `
-          : '<div id="limit" class="problem-section hidden"></div>'
+      : '<div id="limit" class="problem-section hidden"></div>'
   }
 
   <section id="sample-IOs" class="problem-section">
     ${problemData
-        .testCaseInputs!.map(
-            (input, index) => `
+      .testCaseInputs!.map(
+        (input, index) => `
       <div class="sample-container">
         <div class="sample-box">
           <h2>예제 입력 ${index + 1}</h2>
@@ -122,15 +128,19 @@ export const ProblemHtmlForm = (problemData: problemData) => {
           <pre class="sampledata">${problemData.testCaseOutputs![index]}</pre>
         </div>
       </div>
-      ${problemData.testCaseExplains![index] === undefined ? '' : `${problemData.testCaseExplains![index]}`}
+      ${
+        problemData.testCaseExplains![index] === undefined
+          ? ""
+          : `${problemData.testCaseExplains![index]}`
+      }
     `
-        )
-        .join('')}
+      )
+      .join("")}
   </section>
 
   ${
-      problemData.hint!.trim() !== ''
-          ? `
+    problemData.hint!.trim() !== ""
+      ? `
     <section id="hint" class="problem-section">
       <div class="headline">
         <h2>힌트</h2>
@@ -140,18 +150,18 @@ export const ProblemHtmlForm = (problemData: problemData) => {
       </div>
     </section>
     `
-          : '<div id="hint" class="problem-section hidden"></div>'
+      : '<div id="hint" class="problem-section hidden"></div>'
   }
 
   ${
-      problemData.source !== null
-          ? `
+    problemData.source !== null
+      ? `
     <section id="source" class="problem-section">
       <div id="source" class="problem-text">
         ${problemData.source}
       </div>
     </section>`
-          : '<div id="source" class="problem-section hidden"></div>'
+      : '<div id="source" class="problem-section hidden"></div>'
   }
 </body>
 </html>
@@ -160,16 +170,16 @@ export const ProblemHtmlForm = (problemData: problemData) => {
 
 // 웹뷰에 전달할 테마 정보를 포함한 메시지를 생성하는 함수
 function createThemeMessage() {
-    const currentTheme = vscode.window.activeColorTheme.kind;
-    return { theme: currentTheme };
+  const currentTheme = vscode.window.activeColorTheme.kind;
+  return { theme: currentTheme };
 }
 
 function getThemeStyles() {
-    // 현재 테마를 가져와서 해당 테마에 따른 스타일을 반환하는 함수
-    const currentTheme = vscode.window.activeColorTheme.kind;
-    switch (currentTheme) {
-        case vscode.ColorThemeKind.Light:
-            return `
+  // 현재 테마를 가져와서 해당 테마에 따른 스타일을 반환하는 함수
+  const currentTheme = vscode.window.activeColorTheme.kind;
+  switch (currentTheme) {
+    case vscode.ColorThemeKind.Light:
+      return `
         code { background-color: #f2f2f2; padding: 2px 4px; border-radius: 4px; }
         pre {
           background-color: #f2f2f2;
@@ -177,8 +187,8 @@ function getThemeStyles() {
           font-size: 14px;
         }
       `;
-        case vscode.ColorThemeKind.Dark:
-            return `
+    case vscode.ColorThemeKind.Dark:
+      return `
         code { background-color: #2e2e2e; padding: 2px 4px; border-radius: 4px; }
         pre {
           background-color: #2e2e2e;
@@ -186,38 +196,50 @@ function getThemeStyles() {
           font-size: 14px;
         }
       `;
-        default:
-            return '';
-    }
+    default:
+      return "";
+  }
 }
+// =================================================================
 
 /**
- * 주석 폼
+ * @description 언어 별 생성 파일 내 주석 폼
  */
-export const juseokForm = (lang: string, problemData: problemData, number: string): string => {
-    const date = new Date().toISOString().split('T')[0];
+export const juseokForm = (
+  lang: string,
+  problemData: problemData,
+  number: string
+): string => {
+  const date = new Date().toISOString().split("T")[0];
+  // Linux : 리눅스 / Darwin : 맥 / Windows_NT : 윈도우
+  const platform = os.type();
 
-    if (lang === 'py') {
-        // python 시작 tool
-        return `#=====================================================================
+  /**
+   * @language 파이썬
+   */
+  if (lang === "py") {
+    return `#=====================================================================
 #   ${number}번: ${problemData.title}                   
 #   @date:   ${date}              
 #   @link:   https://www.acmicpc.net/problem/${number}  
 #   @Motd:   폴더 내부에 있는 파일을 삭제하지 말아주세요.
-#   @method: 코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
+#   @Test:   코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 #=====================================================================
 
-T = input()
+import sys;
+
+input = sys.stdin.readline
 `;
-        // =======================================================================================================
-    } else if (lang === 'cpp') {
-        // c++ 시작 tool
-        return `//=====================================================================
+  } else if (lang === "cpp") {
+    /**
+     * @language C++
+     */
+    return `//=====================================================================
 //   ${number}번: ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
 //   @Motd:   폴더 내부에 있는 파일을 삭제하지 말아주세요.
-//   @method: 코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
+//   @Test:   코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 //=====================================================================
 
 #include <iostream>
@@ -228,14 +250,17 @@ int main() {
   return 0;
 }
 `;
-    } else if (lang === 'java') {
-        // java 시작 tool
-        return `//=====================================================================
+  } else if (lang === "java") {
+    /**
+     * @language 자바
+     */
+
+    return `//=====================================================================
 //   ${number}번: ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
 //   @Motd:   폴더 내부에 있는 파일을 삭제하지 말아주세요.
-//   @method: 코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
+//   @Test:   코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 //=====================================================================
 
 import java.util.*;
@@ -247,14 +272,16 @@ public class Main {
 
 }
 `;
-    } else if (lang === 'c') {
-        // c 시작 tool
-        return `//=====================================================================
+  } else if (lang === "c") {
+    /**
+     * @language C언어
+     */
+    return `//=====================================================================
 //   ${number}번: ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
 //   @Motd:   폴더 내부에 있는 파일을 삭제하지 말아주세요.
-//   @method: 코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
+//   @Test:   코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 //=====================================================================
 
 #include <stdio.h>
@@ -266,29 +293,50 @@ int main() {
   return 0;
 }
 `;
-    } else if (lang === 'js') {
-        // javascript 시작 tool
-        return `//=====================================================================
+  } else if (lang === "js") {
+    if (platform === "Darwin" || platform === "windows_NT") {
+      /**
+       * @language 자바스크립트 nodejs ( mac or windows )
+       */
+      return `//=====================================================================
 //   ${number}번: ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
 //   @Motd:   폴더 내부에 있는 파일을 삭제하지 말아주세요.
-//   @method: 코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
+//   @Test:   코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 //=====================================================================
 
 
-const readline = require('readline');
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
+const input = require("fs").readFileSync("/dev/stdin").toString().split("\n");
 
-rl.on('line', (input) => {
-  // 입력 처리
-  rl.close();
-});
+
 `;
     } else {
-        return '';
+      /**
+       * @language 자바스크립트 nodejs ( Linux )
+       */
+      return `//=====================================================================
+//   ${number}번: ${problemData.title}                   
+//   @date:   ${date}              
+//   @link:   https://www.acmicpc.net/problem/${number}  
+//   @Motd:   폴더 내부에 있는 파일을 삭제하지 말아주세요.
+//   @Test:   코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
+//=====================================================================
+      
+      
+      const readline = require('readline');
+      const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+      });
+      
+      rl.on('line', (input) => {
+        // 입력 처리
+        rl.close();
+      });
+      `;
     }
+  } else {
+    return "";
+  }
 };

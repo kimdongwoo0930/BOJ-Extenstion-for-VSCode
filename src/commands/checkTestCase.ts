@@ -98,7 +98,7 @@ const runCommand = async (
     process.stderr.on("data", (data: Buffer | string) => {
       const errorOutput = data.toString().trim();
       resultConsole.appendLine("-".repeat(40));
-      resultConsole.appendLine(`Test Case ${index + 1}: 오류`);
+      resultConsole.appendLine(`Test Case ${index + 1}: 오류 ⚠️`);
       resultConsole.appendLine("-".repeat(40));
       resultConsole.appendLine(`오류 출력: ${errorOutput}`);
       resultConsole.appendLine("-".repeat(40));
@@ -111,7 +111,7 @@ const runCommand = async (
         resultConsole.appendLine("-".repeat(40));
         resultConsole.appendLine(
           `Test Case ${index + 1}: ${
-            output === resultOutput.trim() ? "성공" : "실패"
+            output === resultOutput.trim() ? "성공 ✅" : "실패 ❌"
           }`
         );
         resultConsole.appendLine("-".repeat(40));

@@ -21,5 +21,5 @@ export const showProblem = (number: string, problemData: problemData | void, con
 
 /**
  *
- * 출처 : https://github.com/dltkdgns00/BOJ-extension/blob/main/src/commands/showProblem.ts
+ * 참고 : https://github.com/dltkdgns00/BOJ-extension/blob/main/src/commands/showProblem.ts
  */
