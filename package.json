@@ -20,6 +20,10 @@
       {
         "command": "boj-extension-for-vscode.checkTestCase",
         "title": "BOJ: 테스트"
+      },
+      {
+        "command": "boj-extension-for-vscode.showProblem",
+        "title": "BOJ: 문제 보기"
       }
     ]
   },
