@@ -222,7 +222,7 @@ export const juseokForm = (
 #   ${number}번: ${problemData.title}                   
 #   @date:   ${date}              
 #   @link:   https://www.acmicpc.net/problem/${number}  
-#   @Motd:   폴더 내부에 있는 파일을 삭제하지 말아주세요.
+#   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
 #   @Test:   코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 #=====================================================================
 
@@ -238,7 +238,7 @@ input = sys.stdin.readline
 //   ${number}번: ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
-//   @Motd:   폴더 내부에 있는 파일을 삭제하지 말아주세요.
+//   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
 //   @Test:   코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 //=====================================================================
 
@@ -259,7 +259,7 @@ int main() {
 //   ${number}번: ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
-//   @Motd:   폴더 내부에 있는 파일을 삭제하지 말아주세요.
+//   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
 //   @Test:   코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 //=====================================================================
 
@@ -280,7 +280,7 @@ public class Main {
 //   ${number}번: ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
-//   @Motd:   폴더 내부에 있는 파일을 삭제하지 말아주세요.
+//   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
 //   @Test:   코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 //=====================================================================
 
@@ -294,7 +294,7 @@ int main() {
 }
 `;
   } else if (lang === "js") {
-    if (platform === "Darwin" || platform === "windows_NT") {
+    if (platform === "Darwin") {
       /**
        * @language 자바스크립트 nodejs ( mac or windows )
        */
@@ -302,12 +302,22 @@ int main() {
 //   ${number}번: ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
-//   @Motd:   폴더 내부에 있는 파일을 삭제하지 말아주세요.
+//   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
 //   @Test:   코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 //=====================================================================
 
 
-const input = require("fs").readFileSync("/dev/stdin").toString().split("\n");
+// 백준 제출전 입력코드를 아래 코드로 수정해주세요.
+// const input = require("fs").readFileSync("/dev/stdin").toString().split("\n");
+ 
+
+// node.js는 각각의 OS에서 같은 방법으로 테스트하기위해 input.txt를 통해 테스트를 진행합니다.
+// 테스트를 위해 아래 코드를 이용해 주세요.
+const fs = require("fs");
+const path = require("path");
+
+const inputFilePath = path.join(__dirname, "input.txt");
+let input = fs.readFileSync(inputFilePath).toString().split("\n");
 
 
 `;
@@ -319,22 +329,23 @@ const input = require("fs").readFileSync("/dev/stdin").toString().split("\n");
 //   ${number}번: ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
-//   @Motd:   폴더 내부에 있는 파일을 삭제하지 말아주세요.
+//   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
 //   @Test:   코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 //=====================================================================
-      
-      
-      const readline = require('readline');
-      const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-      });
-      
-      rl.on('line', (input) => {
-        // 입력 처리
-        rl.close();
-      });
-      `;
+
+// 백준 제출전 입력코드를 아래 코드로 수정해주세요.
+// const input = require("fs").readFileSync("/dev/stdin").toString().split("\n");
+ 
+
+// node.js는 각각의 OS에서 같은 방법으로 테스트하기위해 input.txt를 통해 테스트를 진행합니다.
+// 테스트를 위해 아래 코드를 이용해 주세요.
+const fs = require("fs");
+const path = require("path");
+
+const inputFilePath = path.join(__dirname, "input.txt");
+let input = fs.readFileSync(inputFilePath).toString().split("\n");
+
+`;
     }
   } else {
     return "";

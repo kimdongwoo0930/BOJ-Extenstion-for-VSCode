@@ -81,6 +81,9 @@ const runCommand = async (
   index: number
 ) => {
   try {
+    if (lang === "js") {
+      await writeInputTXT(input, filePath);
+    }
     const process = await processSetting(lang, filePath);
 
     if (!process) {
@@ -150,7 +153,7 @@ const processSetting = (lang: string, filePath: string): Promise<any> => {
       const file = filePath.replace(/\.[^/.]+$/, "");
       try {
         execSync(`gcc "${filePath}" -o "${file}"`);
-        resolve(spawn(`./${file}`));
+        resolve(spawn(`./${file}`, { stdio: ["pipe", "pipe", "pipe"] }));
       } catch (error) {
         reject(new Error(`컴파일 오류: ${error}`));
       }
@@ -220,4 +223,24 @@ const getHtmlFilesInSameFolder = (document: vscode.TextDocument): string[] => {
 // 현재 파일의 경로에서 폴더 경로를 가져오는 함수
 const getFolderPath = (filePath: string): string => {
   return path.dirname(filePath);
+};
+
+// =================================================================================================
+/**
+ * 자바스크립트인 경우 input.txt를 통해 테스트를 하기위해 input.txt파일에 인풋값을 저장하는 함수를 만들어줘야한다.
+ *
+ */
+const writeInputTXT = async (input: string, filePath: string) => {
+  const folderPath = filePath.replace(/index\.js$/, "");
+  const inputFilePath = path.join(folderPath, "input.txt");
+  // console.log("Writing to:", inputFilePath);
+  // console.log("Input content:", input);
+
+  try {
+    fs.writeFileSync(inputFilePath, input);
+    // console.log("Input data written to input.txt successfully.");
+  } catch (err) {
+    await vscode.window.showErrorMessage("input.txt 쓰기에 실패했습니다.");
+    // console.error("Error writing to input.txt:", err);
+  }
 };

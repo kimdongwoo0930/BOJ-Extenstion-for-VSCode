@@ -47,6 +47,7 @@ export const makeFolder = async (
       const filePath = path.join(newFolderPath, fileName);
       const ReadmePath = path.join(newFolderPath, Readme);
       const problemPath = path.join(newFolderPath, problem);
+      const inputFilePath = path.join(newFolderPath, "input.txt");
 
       const fileContent = juseokForm(language, problemData!, number!);
       const ReadmeContent = `# ${number}번: ${problemData!.title}\n\n## 문제\n${
@@ -73,6 +74,10 @@ export const makeFolder = async (
 
       if (language === "js") {
         await initializeNodeProject(newFolderPath);
+        await fs.promises.writeFile(inputFilePath, "");
+        await vscode.window.showInformationMessage(
+          "Input 파일이 생성되었습니다."
+        );
       }
 
       // 왼쪽 분할 화면에 텍스트 에디터를 열기
