@@ -308,7 +308,7 @@ int main() {
 
 
 // 백준 제출전 입력코드를 아래 코드로 수정해주세요.
-// const input = require("fs").readFileSync("/dev/stdin").toString().split("\n");
+// const input = require("fs").readFileSync("/dev/stdin").toString().split("\\n");
  
 
 // node.js는 각각의 OS에서 같은 방법으로 테스트하기위해 input.txt를 통해 테스트를 진행합니다.
@@ -334,7 +334,7 @@ let input = fs.readFileSync(inputFilePath).toString().split("\n");
 //=====================================================================
 
 // 백준 제출전 입력코드를 아래 코드로 수정해주세요.
-// const input = require("fs").readFileSync("/dev/stdin").toString().split("\n");
+// const input = require("fs").readFileSync("/dev/stdin").toString().split("\\n");
  
 
 // node.js는 각각의 OS에서 같은 방법으로 테스트하기위해 input.txt를 통해 테스트를 진행합니다.

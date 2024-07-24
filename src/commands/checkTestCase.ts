@@ -4,6 +4,7 @@ import { spawn, execSync } from "child_process";
 import { getProblemData } from "../utils/getProblemData";
 import { problemData } from "../types/problemData";
 import * as fs from "fs";
+import * as os from 'os';
 
 export const checkTestCase = async (context: vscode.ExtensionContext) => {
   try {
@@ -114,7 +115,7 @@ const runCommand = async (
         resultConsole.appendLine("-".repeat(40));
         resultConsole.appendLine(
           `Test Case ${index + 1}: ${
-            output === resultOutput.trim() ? "성공 ✅" : "실패 ❌"
+            output.replace(/\r?\n|\r/g, " ") === resultOutput.trim().replace(/\n/g, " ") ? "성공 ✅" : "실패 ❌"
           }`
         );
         resultConsole.appendLine("-".repeat(40));
@@ -122,7 +123,7 @@ const runCommand = async (
         resultConsole.appendLine(
           `예상 출력: ${resultOutput.trim().replace(/\n/g, " ")}`
         );
-        resultConsole.appendLine(`실제 출력: ${output.replace(/\n/g, " ")}`);
+        resultConsole.appendLine(`실제 출력: ${output.replace(/\r?\n|\r/g, " ")}`);
         resultConsole.appendLine("-".repeat(40));
       }
       return;
@@ -146,9 +147,12 @@ const runCommand = async (
 };
 
 const processSetting = (lang: string, filePath: string): Promise<any> => {
+    // Linux : 리눅스 / Darwin : 맥 / Windows_NT : 윈도우
+    const platform = os.type();
   return new Promise((resolve, reject) => {
     if (lang === "py") {
-      resolve(spawn("python3", [filePath]));
+      if(platform === "Windows_NT"){    resolve(spawn("python", [filePath]));  }
+      else {     resolve(spawn("python3", [filePath])); }
     } else if (lang === "c") {
       const file = filePath.replace(/\.[^/.]+$/, "");
       try {
