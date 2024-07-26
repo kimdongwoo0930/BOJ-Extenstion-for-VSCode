@@ -74,8 +74,10 @@ export const makeFolder = async (
         "문제 HTML 파일이 생성되었습니다: " + problemPath
       );
 
-      if (language === "js") {
-        await initializeNodeProject(newFolderPath);
+      if (language === "js" || language === "cpp" || language === "c") {
+        if (language === "js") {
+          await initializeNodeProject(newFolderPath);
+        }
         await fs.promises.writeFile(inputFilePath, "");
         await vscode.window.showInformationMessage(
           "Input 파일이 생성되었습니다."

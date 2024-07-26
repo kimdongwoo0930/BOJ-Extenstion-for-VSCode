@@ -246,6 +246,8 @@ input = sys.stdin.readline
 using namespace std;
             
 int main() {
+  //  freopen("input.txt", "r", stdin);
+  //  BOJ: 테스트를 이용할때 위 코드로 입력을 받아주세요.
               
   return 0;
 }
@@ -289,6 +291,9 @@ public class Main {
 #include <string.h>
 
 int main() {
+
+  //  freopen("input.txt", "r", stdin);
+  //  BOJ: 테스트를 이용할때 위 코드로 입력을 받아주세요.
               
   return 0;
 }

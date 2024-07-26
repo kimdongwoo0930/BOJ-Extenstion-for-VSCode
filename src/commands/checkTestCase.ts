@@ -19,7 +19,12 @@ export const checkTestCase = async (context: vscode.ExtensionContext) => {
     const document = editor.document;
     const filePath = editor.document.fileName;
     const lang = path.extname(document?.fileName).replace(".", "").trim();
-    const number = getHtmlFilesInSameFolder(document)[0].split(".")[0];
+    const htmlFiles = getHtmlFilesInSameFolder(document);
+    if (htmlFiles.length === 0) {
+      vscode.window.showErrorMessage("HTML 파일을 찾을 수 없습니다.");
+      return;
+    }
+    const number = htmlFiles[0].split(".")[0];
     console.log();
     console.log(`확장자 : ${lang}`);
     console.log(`문제 번호 : ${number}`);
@@ -81,18 +86,19 @@ const runCommand = async (
   resultConsole: vscode.OutputChannel,
   index: number
 ) => {
+  let outputs = "";
+  if (lang === "js" || lang === "c" || lang === "cpp") {
+    await writeInputTXT(input, filePath, lang);
+  }
+  const process = await processSetting(lang, filePath);
+
+  if (!process) {
+    vscode.window.showErrorMessage("지원하지 않는 언어입니다.");
+    return;
+  }
+
+
   try {
-    if (lang === "js") {
-      await writeInputTXT(input, filePath);
-    }
-    const process = await processSetting(lang, filePath);
-
-    if (!process) {
-      vscode.window.showErrorMessage("지원하지 않는 언어입니다.");
-      return;
-    }
-
-    let outputs = "";
     // 테스트 결과
     process.stdout.on("data", (data: Buffer) => {
       outputs += data.toString();
@@ -133,12 +139,16 @@ const runCommand = async (
     await new Promise<void>((resolve, reject) => {
       process.stdin.write(input, "utf-8", (err: Buffer) => {
         if (err) {
+          console.log(err);
           reject(err);
+        } else {
+          process.stdin.end(() => resolve());
         }
       });
-      process.stdin.end();
-      process.on("close", () => resolve());
+
+      // process.on("close", () => resolve());
     });
+
   } catch (error) {
     resultConsole.appendLine(
       `테스트 케이스 ${index} 실행 중 오류 발생: ${error}`
@@ -156,13 +166,14 @@ const processSetting = (lang: string, filePath: string): Promise<any> => {
     } else if (lang === "c") {
       const file = filePath.replace(/\.[^/.]+$/, "");
       try {
-        execSync(`gcc "${filePath}" -o "${file}"`);
-        resolve(spawn(`./${file}`, { stdio: ["pipe", "pipe", "pipe"] }));
+        execSync(`gcc "${filePath}" -o "${file}" -std=gnu11`);
+        // execSync(`chmod +x ${filePath}/${file}"`);
+        resolve(spawn(`./${file}`));
       } catch (error) {
         reject(new Error(`컴파일 오류: ${error}`));
       }
     } else if (lang === "cpp") {
-      const file = filePath.replace(/\.[^/.]+$/, "");
+      const file = filePath.slice(0, filePath.length - 4);
       try {
         execSync(`g++ -std=c++17 "${filePath}" -o "${file}"`);
         resolve(spawn(`./${file}`));
@@ -232,10 +243,11 @@ const getFolderPath = (filePath: string): string => {
 // =================================================================================================
 /**
  * 자바스크립트인 경우 input.txt를 통해 테스트를 하기위해 input.txt파일에 인풋값을 저장하는 함수를 만들어줘야한다.
+ * c언어와 cpp 언어도 임시로 해결될때까지 일단 txt를 통해 테스트를 진행한다.
  *
  */
-const writeInputTXT = async (input: string, filePath: string) => {
-  const folderPath = filePath.replace(/index\.js$/, "");
+const writeInputTXT = async (input: string, filePath: string, lang: string) => {
+  const folderPath = getFolderPath(filePath);
   const inputFilePath = path.join(folderPath, "input.txt");
   // console.log("Writing to:", inputFilePath);
   // console.log("Input content:", input);
@@ -245,6 +257,17 @@ const writeInputTXT = async (input: string, filePath: string) => {
     // console.log("Input data written to input.txt successfully.");
   } catch (err) {
     await vscode.window.showErrorMessage("input.txt 쓰기에 실패했습니다.");
+    console.log(err);
     // console.error("Error writing to input.txt:", err);
   }
 };
+
+// const getFolderPath = () => {
+//   if (lang === "js") {
+//     return filePath.replace(/index\.js$/, "");
+//   } else if (lang === "c") {
+//     return filePath.replace(/main\.c$/, "");
+//   } else if (lang === "cpp") {
+//     return filePath.replace(/main\.cpp$/, "");
+//   }
+// };
