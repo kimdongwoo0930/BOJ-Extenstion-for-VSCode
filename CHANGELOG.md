@@ -1,9 +1,6 @@
-# Change Log
+## 업데이트 일지
 
-All notable changes to the "boj-extension-for-vscode" extension will be documented in this file.
-
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
-
-## [Unreleased]
-
-- Initial release
+- #### [ 0.0.1 ]  2024-07-27
+    - 기본 적인 모든 기능 구현 완료및 테스트 완료
+    - 첫 배포
+    - Readme 1차 작성 완료

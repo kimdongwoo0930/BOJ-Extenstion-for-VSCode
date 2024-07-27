@@ -1,7 +1,12 @@
-// 백준 마지막 페이지에 있는 문제 번호를 가지고 와서 입력받은 숫자와 비교를 해보자.
-// https://www.acmicpc.net/problemset?sort=no_desc
+// // 백준 마지막 페이지에 있는 문제 번호를 가지고 와서 입력받은 숫자와 비교를 해보자.
+// // https://www.acmicpc.net/problemset?sort=no_desc
 
-import { JSDOM } from "jsdom";
+// =================================================================
+// 성능문제로 사용안하기로 했다
+// =================================================================
+
+/** 
+import vscode from "vscode";
 
 export const checkProblemNumber = async (
   number: string | undefined
@@ -10,35 +15,35 @@ export const checkProblemNumber = async (
     return false;
   }
 
-  const url = "https://www.acmicpc.net/problemset?sort=no_desc";
-
-  try {
-    // Cheerio를 사용하여 HTML 파싱
-    const response = await fetch(url, {
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
-        "Accept-Language": "ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7",
-      },
-    });
-
-    // 응답 데이터를 문자열로 변환
-    // const htmlString = await response.text();
-    // // HTML 문자열을 파싱하여 DOM 객체 생성
-    // const dom = new JSDOM(htmlString);
-    // const document = dom.window.document;
-
-    // // <td> 태그들을 가져오기
-    // const tdElements = document.querySelectorAll("td");
-
-    // // 각 <td> 태그의 내용을 출력
-    // tdElements.forEach((td, index) => {
-    //   console.log(`TD ${index + 1}: ${td.textContent}`);
-    // });
-
-    return true;
-  } catch (error) {
-    console.error(error);
+  const InputNumber = parseInt(number.trim(), 10);
+  if (InputNumber < 1000) {
     return false;
   }
+
+  const url = "https://www.acmicpc.net/problemset?sort=no_desc";
+
+  // 불러오는동안 로딩 화면 만들기
+  return await vscode.window.withProgress(
+    {
+      location: vscode.ProgressLocation.Window,
+      title: "로딩 중...",
+      cancellable: false, // 사용자가 취소할 수 없도록 설정
+    },
+    async (progress) => {
+      // 실제 데이터 가져오기
+      const $ = await fetchHtmlData(url);
+
+      if ($) {
+        const lastNum = parseInt($("td:first").text().trim(), 10);
+        console.log(InputNumber, lastNum);
+
+        if (InputNumber <= lastNum) {
+          return true;
+        }
+        return false;
+      }
+      return false;
+    }
+  );
 };
+*/

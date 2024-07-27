@@ -1,8 +1,10 @@
 {
   "name": "boj-extension-for-vscode",
   "displayName": "BOJ Extension for VSCode",
-  "description": "It helps you solve Baekjun's problem comfortably in vscode.",
-  "version": "0.0.1",
+  "description": "백준 온라인 문제를 VS Code에서 풀어보자.",
+  "version": "0.0.2",
+  "author": "Dong",
+  "publisher": "Dong",
   "engines": {
     "vscode": "^1.91.0"
   },
@@ -14,12 +16,16 @@
   "contributes": {
     "commands": [
       {
-        "command": "boj-extension-for-vscode.helloWorld",
-        "title": "BOJ: Hello World"
+        "command": "boj-extension-for-vscode.getProblemByNumber",
+        "title": "BOJ: 문제 가져오기"
       },
       {
-        "command": "boj-extension-for-vscode.getProblemByNumber",
-        "title": "BOJ: Get problem by number"
+        "command": "boj-extension-for-vscode.checkTestCase",
+        "title": "BOJ: 테스트"
+      },
+      {
+        "command": "boj-extension-for-vscode.showProblem",
+        "title": "BOJ: 문제 보기"
       }
     ]
   },
@@ -55,6 +61,7 @@
     "bufferutil": "^4.0.8",
     "canvas": "^2.11.2",
     "cheerio": "^1.0.0-rc.12",
+    "child_process": "^1.0.2",
     "jsdom": "^24.1.0",
     "rss-parser": "^3.13.0",
     "utf-8-validate": "^6.0.4",
