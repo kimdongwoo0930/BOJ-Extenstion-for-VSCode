@@ -26,9 +26,11 @@ export const makeFolder = async (
 ) => {
   let selectedFolderPath = folder[0].fsPath;
   const platform = os.type();
-  console.log(platform)
 
-  const folderName = platform !== "Windows_NT" ? `${number}번: ${problemData!.title}` : `${number}번 ${problemData!.title}`;
+  const folderName =
+    platform !== "Windows_NT"
+      ? `${number}번: ${problemData!.title}`
+      : `${number}번 ${problemData!.title}`;
 
   let newFolderPath = path.join(selectedFolderPath, folderName);
 
@@ -91,7 +93,7 @@ export const makeFolder = async (
       // 시각화
       showProblem(number!, problemData, context);
     } catch (err) {
-      console.log(err)
+      // console.log(err);
       vscode.window.showErrorMessage(
         "파일 생성에 실패했습니다. 다시 시도해주세요."
       );

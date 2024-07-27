@@ -1,10 +1,10 @@
-import path, { resolve } from "path";
+import path from "path";
 import * as vscode from "vscode";
 import { spawn, execSync } from "child_process";
 import { getProblemData } from "../utils/getProblemData";
 import { problemData } from "../types/problemData";
 import * as fs from "fs";
-import * as os from 'os';
+import * as os from "os";
 
 export const checkTestCase = async (context: vscode.ExtensionContext) => {
   try {
@@ -25,9 +25,9 @@ export const checkTestCase = async (context: vscode.ExtensionContext) => {
       return;
     }
     const number = htmlFiles[0].split(".")[0];
-    console.log();
-    console.log(`확장자 : ${lang}`);
-    console.log(`문제 번호 : ${number}`);
+    // console.log();
+    // console.log(`확장자 : ${lang}`);
+    // console.log(`문제 번호 : ${number}`);
 
     if (
       lang === "py" ||
@@ -36,7 +36,7 @@ export const checkTestCase = async (context: vscode.ExtensionContext) => {
       lang === "js" ||
       lang === "java"
     ) {
-      console.log("available languages");
+      // console.log("available languages");
 
       // 문제 가져오기
       // const url = `https://www.acmicpc.net/problem/${number}`;
@@ -71,7 +71,7 @@ export const checkTestCase = async (context: vscode.ExtensionContext) => {
       vscode.window.showErrorMessage("테스트할 파일을 열고 실행해 주세요.");
     }
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     vscode.window.showErrorMessage("오류 발생 다시 실행해주세요.");
   }
 };
@@ -86,110 +86,117 @@ const runCommand = async (
   resultConsole: vscode.OutputChannel,
   index: number
 ) => {
-
-  return new Promise<void>((resolve,rejects) => {
+  return new Promise<void>((resolve, rejects) => {
     let outputs = "";
-  if (lang === "js") {
-   writeInputTXT(input, filePath, lang);
-  }
-  const process = processSetting(lang, filePath);
-
-  if (!process) {
-    rejects(new Error('Failed to start process'));
-    return;
-  }
-
-  process.stdout.on("data", (data: Buffer) => {
-    outputs += data.toString();
-  });
-
-  process.stderr.setEncoding('utf-8');
-
-  // 테스트 오류 시
-  process.stderr.on("data", (data: Buffer | string) => {
-    // Buffer가 아닌 경우에는 그대로 사용
-    const errorOutput = (typeof data === 'string') ? data.trim() : data.toString('utf-8').trim();
-
-    resultConsole.appendLine("-".repeat(50));
-    resultConsole.appendLine(`Test Case ${index + 1}: 오류 ⚠️`);
-    resultConsole.appendLine("-".repeat(50));
-    resultConsole.appendLine(`오류 출력: ${errorOutput}`);
-    resultConsole.appendLine("-".repeat(50));
-  });
-
-
-  process.on("close", (code: number) => {
-    const output = outputs.trim();
-    if (code === 0) {
-      resultConsole.appendLine("-".repeat(50));
-      resultConsole.appendLine(
-        `Test Case ${index + 1}: ${
-          output.replace(/\r?\n|\r/g, " ") === resultOutput.trim().replace(/\n/g, " ") ? "성공 ✅" : "실패 ❌"
-        }`
-      );
-      resultConsole.appendLine("-".repeat(50));
-      resultConsole.appendLine(`입력: ${input.trim().replace(/\n/g, " ")}`);
-      resultConsole.appendLine(
-        `예상 출력: ${resultOutput.trim().replace(/\n/g, " ")}`
-      );
-      resultConsole.appendLine(`실제 출력: ${output.replace(/\r?\n|\r/g, " ")}`);
-      resultConsole.appendLine("-".repeat(50));
+    if (lang === "js") {
+      writeInputTXT(input, filePath, lang);
     }
-    resolve();
-  });
+    const process = processSetting(lang, filePath);
 
-  // 비동기 작업을 동기처럼 처리
-  process.stdin.write(input, "utf-8", (err) => {
-    if (err) {
-      rejects(err);
+    if (!process) {
+      rejects(new Error("Failed to start process"));
       return;
     }
-    process.stdin.end(); // 입력 종료
+
+    process.stdout.on("data", (data: Buffer) => {
+      outputs += data.toString();
+    });
+
+    process.stderr.setEncoding("utf-8");
+
+    // 테스트 오류 시
+    process.stderr.on("data", (data: Buffer | string) => {
+      // Buffer가 아닌 경우에는 그대로 사용
+      const errorOutput =
+        typeof data === "string" ? data.trim() : data.toString("utf-8").trim();
+
+      resultConsole.appendLine("-".repeat(50));
+      resultConsole.appendLine(`Test Case ${index + 1}: 오류 ⚠️`);
+      resultConsole.appendLine("-".repeat(50));
+      resultConsole.appendLine(`오류 출력: ${errorOutput}`);
+      resultConsole.appendLine("-".repeat(50));
+    });
+
+    process.on("close", (code: number) => {
+      const output = outputs.trim();
+      if (code === 0) {
+        resultConsole.appendLine("-".repeat(50));
+        resultConsole.appendLine(
+          `Test Case ${index + 1}: ${
+            output.replace(/\r?\n|\r/g, " ") ===
+            resultOutput.trim().replace(/\n/g, " ")
+              ? "성공 ✅"
+              : "실패 ❌"
+          }`
+        );
+        resultConsole.appendLine("-".repeat(50));
+        resultConsole.appendLine(`입력: ${input.trim().replace(/\n/g, " ")}`);
+        resultConsole.appendLine(
+          `예상 출력: ${resultOutput.trim().replace(/\n/g, " ")}`
+        );
+        resultConsole.appendLine(
+          `실제 출력: ${output.replace(/\r?\n|\r/g, " ")}`
+        );
+        resultConsole.appendLine("-".repeat(50));
+      }
+      resolve();
+    });
+
+    // 비동기 작업을 동기처럼 처리
+    process.stdin.write(input, "utf-8", (err) => {
+      if (err) {
+        rejects(err);
+        return;
+      }
+      process.stdin.end(); // 입력 종료
+    });
   });
-})
-}
+};
 
 const processSetting = (lang: string, filePath: string) => {
-    // Linux : 리눅스 / Darwin : 맥 / Windows_NT : 윈도우
-    const platform = os.type();
-    if (lang === "py") {
-      if(platform === "Windows_NT"){    return spawn("python", [filePath]);  }
-      else {     return spawn("python3", [filePath]); }
-    } else if (lang === "c") {
-      const file = filePath.replace(/\.[^/.]+$/, "");
-      try {
-        execSync(`gcc "${filePath}" -o "${file}" -std=gnu11`);
-        // execSync(`chmod +x ${filePath}/${file}"`);
-        if(platform === "Windows_NT"){
-          return spawn('./main', { cwd : path.dirname(filePath) })
-        }
-        return spawn(`./main`);
-      } catch (error) {
-        new Error(`컴파일 오류: ${error}`);
-      }
-    } else if (lang === "cpp") {
-      const file = filePath.slice(0, filePath.length - 4);
-      try {
-        execSync(`g++ -std=c++17 "${filePath}" -o "${file}"`);
-        if(platform === "Windows_NT"){
-          return spawn('./main', { cwd : path.dirname(filePath) })
-        }
-        return spawn(`./main`);
-      } catch (error) {
-        new Error(`컴파일 오류: ${error}`);
-      }
-    } else if (lang === "java") {
-      const dirName = path.dirname(filePath);
-      try {
-        return spawn(`java`, ["-cp", dirName, filePath]);
-      } catch (error) {
-        new Error(`컴파일 오류: ${error}`);
-      }
-    } else if (lang === "js") {
-      return spawn("node", [filePath]);
+  // Linux : 리눅스 / Darwin : 맥 / Windows_NT : 윈도우
+  const platform = os.type();
+  if (lang === "py") {
+    if (platform === "Windows_NT") {
+      return spawn("python", [filePath]);
     } else {
-      new Error(`Unsupported language: ${lang}`);
+      return spawn("python3", [filePath]);
     }
+  } else if (lang === "c") {
+    const file = filePath.replace(/\.[^/.]+$/, "");
+    try {
+      execSync(`gcc "${filePath}" -o "${file}" -std=gnu11`);
+      // execSync(`chmod +x ${filePath}/${file}"`);
+      if (platform === "Windows_NT") {
+        return spawn("./main", { cwd: path.dirname(filePath) });
+      }
+      return spawn(`./main`);
+    } catch (error) {
+      new Error(`컴파일 오류: ${error}`);
+    }
+  } else if (lang === "cpp") {
+    const file = filePath.slice(0, filePath.length - 4);
+    try {
+      execSync(`g++ -std=c++17 "${filePath}" -o "${file}"`);
+      if (platform === "Windows_NT") {
+        return spawn("./main", { cwd: path.dirname(filePath) });
+      }
+      return spawn(`./main`);
+    } catch (error) {
+      new Error(`컴파일 오류: ${error}`);
+    }
+  } else if (lang === "java") {
+    const dirName = path.dirname(filePath);
+    try {
+      return spawn(`java`, ["-cp", dirName, filePath]);
+    } catch (error) {
+      new Error(`컴파일 오류: ${error}`);
+    }
+  } else if (lang === "js") {
+    return spawn("node", [filePath]);
+  } else {
+    new Error(`Unsupported language: ${lang}`);
+  }
 };
 
 const resultMessage = (index: number, resultConsole: vscode.OutputChannel) => {
@@ -221,7 +228,7 @@ const getHtmlFileNames = (folderPath: string): string[] => {
     // HTML 파일만 필터링
     return files.filter((file) => path.extname(file) === ".html");
   } catch (error) {
-    console.error(`폴더를 읽는 중 오류 발생: ${error}`);
+    // console.error(`폴더를 읽는 중 오류 발생: ${error}`);
     return [];
   }
 };
@@ -254,7 +261,7 @@ const writeInputTXT = async (input: string, filePath: string, lang: string) => {
     // console.log("Input data written to input.txt successfully.");
   } catch (err) {
     await vscode.window.showErrorMessage("input.txt 쓰기에 실패했습니다.");
-    console.log(err);
+    // console.log(err);
     // console.error("Error writing to input.txt:", err);
   }
 };
