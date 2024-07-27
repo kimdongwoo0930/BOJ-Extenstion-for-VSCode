@@ -89,7 +89,7 @@ const runCommand = async (
 
   return new Promise<void>((resolve,rejects) => {
     let outputs = "";
-  if (lang === "js" || lang === "c" || lang === "cpp") {
+  if (lang === "js") {
    writeInputTXT(input, filePath, lang);
   }
   const process = processSetting(lang, filePath);
