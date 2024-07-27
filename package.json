@@ -1,7 +1,7 @@
 {
   "name": "boj-extension-for-vscode",
   "displayName": "BOJ Extension for VSCode",
-  "description": "It helps you solve Baekjun's problem comfortably in vscode.",
+  "description": "백준 온라인 문제를 VS Code에서 풀어보자.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.91.0"
