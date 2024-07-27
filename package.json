@@ -1,8 +1,10 @@
 {
   "name": "boj-extension-for-vscode",
-  "displayName": "BOJ Extension for VSCode",
+  "displayName": "BOJ Extension for VSCode - Beta",
   "description": "백준 온라인 문제를 VS Code에서 풀어보자.",
-  "version": "0.0.1",
+  "version": "0.0.3",
+  "author": "Dong",
+  "publisher": "Dong",
   "engines": {
     "vscode": "^1.91.0"
   },

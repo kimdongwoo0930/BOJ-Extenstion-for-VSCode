@@ -219,7 +219,7 @@ export const juseokForm = (
    */
   if (lang === "py") {
     return `#=====================================================================
-#   ${number}번: ${problemData.title}                   
+#   ${number}번:    ${problemData.title}                   
 #   @date:   ${date}              
 #   @link:   https://www.acmicpc.net/problem/${number}  
 #   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
@@ -229,13 +229,14 @@ export const juseokForm = (
 import sys;
 
 input = sys.stdin.readline
+
 `;
   } else if (lang === "cpp") {
     /**
      * @language C++
      */
     return `//=====================================================================
-//   ${number}번: ${problemData.title}                   
+//   ${number}번:    ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
 //   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
@@ -246,9 +247,10 @@ input = sys.stdin.readline
 using namespace std;
             
 int main() {
-  //  freopen("input.txt", "r", stdin);
-  //  BOJ: 테스트를 이용할때 위 코드로 입력을 받아주세요.
-              
+  int t;
+	cin >> t;
+
+  
   return 0;
 }
 `;
@@ -258,7 +260,7 @@ int main() {
      */
 
     return `//=====================================================================
-//   ${number}번: ${problemData.title}                   
+//   ${number}번:    ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
 //   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
@@ -279,7 +281,7 @@ public class Main {
      * @language C언어
      */
     return `//=====================================================================
-//   ${number}번: ${problemData.title}                   
+//   ${number}번:    ${problemData.title}                  
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
 //   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
@@ -291,19 +293,17 @@ public class Main {
 #include <string.h>
 
 int main() {
-
-  //  freopen("input.txt", "r", stdin);
-  //  BOJ: 테스트를 이용할때 위 코드로 입력을 받아주세요.
+  int T;
+  scanf("%d", &T);
               
   return 0;
 }
 `;
   } else if (lang === "js") {
-    if (platform === "Darwin") {
-      /**
-       * @language 자바스크립트 nodejs ( mac or windows )
-       */
-      return `//=====================================================================
+    /**
+     * @language 자바스크립트 nodejs ( mac or windows )
+     */
+    return `//=====================================================================
 //   ${number}번: ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
@@ -326,32 +326,6 @@ let input = fs.readFileSync(inputFilePath).toString().split("\n");
 
 
 `;
-    } else {
-      /**
-       * @language 자바스크립트 nodejs ( Linux )
-       */
-      return `//=====================================================================
-//   ${number}번: ${problemData.title}                   
-//   @date:   ${date}              
-//   @link:   https://www.acmicpc.net/problem/${number}  
-//   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
-//   @Test:   코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
-//=====================================================================
-
-// 백준 제출전 입력코드를 아래 코드로 수정해주세요.
-// const input = require("fs").readFileSync("/dev/stdin").toString().split("\\n");
- 
-
-// node.js는 각각의 OS에서 같은 방법으로 테스트하기위해 input.txt를 통해 테스트를 진행합니다.
-// 테스트를 위해 아래 코드를 이용해 주세요.
-const fs = require("fs");
-const path = require("path");
-
-const inputFilePath = path.join(__dirname, "input.txt");
-let input = fs.readFileSync(inputFilePath).toString().split("\n");
-
-`;
-    }
   } else {
     return "";
   }
