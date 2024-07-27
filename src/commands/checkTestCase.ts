@@ -5,12 +5,11 @@ import { getProblemData } from "../utils/getProblemData";
 import { problemData } from "../types/problemData";
 import * as fs from "fs";
 import * as os from 'os';
-import { rejects } from "assert";
 
 export const checkTestCase = async (context: vscode.ExtensionContext) => {
   try {
     const editor = vscode.window.activeTextEditor;
-    const maxWidth = 40;
+    const maxWidth = 50;
     const resultConsole = vscode.window.createOutputChannel("Test Cases");
     if (!editor) {
       vscode.window.showErrorMessage("No active editor found.");
@@ -108,34 +107,33 @@ const runCommand = async (
 
   // 테스트 오류 시
   process.stderr.on("data", (data: Buffer | string) => {
-    console.log(data.toString('utf-8'))
     // Buffer가 아닌 경우에는 그대로 사용
     const errorOutput = (typeof data === 'string') ? data.trim() : data.toString('utf-8').trim();
 
-    resultConsole.appendLine("-".repeat(40));
+    resultConsole.appendLine("-".repeat(50));
     resultConsole.appendLine(`Test Case ${index + 1}: 오류 ⚠️`);
-    resultConsole.appendLine("-".repeat(40));
+    resultConsole.appendLine("-".repeat(50));
     resultConsole.appendLine(`오류 출력: ${errorOutput}`);
-    resultConsole.appendLine("-".repeat(40));
+    resultConsole.appendLine("-".repeat(50));
   });
 
 
   process.on("close", (code: number) => {
     const output = outputs.trim();
     if (code === 0) {
-      resultConsole.appendLine("-".repeat(40));
+      resultConsole.appendLine("-".repeat(50));
       resultConsole.appendLine(
         `Test Case ${index + 1}: ${
           output.replace(/\r?\n|\r/g, " ") === resultOutput.trim().replace(/\n/g, " ") ? "성공 ✅" : "실패 ❌"
         }`
       );
-      resultConsole.appendLine("-".repeat(40));
+      resultConsole.appendLine("-".repeat(50));
       resultConsole.appendLine(`입력: ${input.trim().replace(/\n/g, " ")}`);
       resultConsole.appendLine(
         `예상 출력: ${resultOutput.trim().replace(/\n/g, " ")}`
       );
       resultConsole.appendLine(`실제 출력: ${output.replace(/\r?\n|\r/g, " ")}`);
-      resultConsole.appendLine("-".repeat(40));
+      resultConsole.appendLine("-".repeat(50));
     }
     resolve();
   });
