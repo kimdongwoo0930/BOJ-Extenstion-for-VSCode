@@ -1,6 +1,6 @@
-import * as vscode from "vscode";
-import { problemData } from "../types/problemData";
-import * as os from "os";
+import * as vscode from 'vscode';
+import { problemData } from '../types/problemData';
+import * as os from 'os';
 
 // 가져온 정보들을 백준 온라인 폼으로 보여주기위해 바꿔준다.
 /**
@@ -9,7 +9,7 @@ import * as os from "os";
  * @param problemData 문제 데이터
  */
 export const ProblemHtmlForm = (problemData: problemData) => {
-  return `
+    return `
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -100,8 +100,8 @@ export const ProblemHtmlForm = (problemData: problemData) => {
   </section>
 
   ${
-    problemData.limit!.trim() !== ""
-      ? `
+      problemData.limit!.trim() !== ''
+          ? `
     <section id="limit" class="problem-section">
       <div class="headline">
         <h2>제한</h2>
@@ -111,13 +111,13 @@ export const ProblemHtmlForm = (problemData: problemData) => {
       </div>
     </section>
     `
-      : '<div id="limit" class="problem-section hidden"></div>'
+          : '<div id="limit" class="problem-section hidden"></div>'
   }
 
   <section id="sample-IOs" class="problem-section">
     ${problemData
-      .testCaseInputs!.map(
-        (input, index) => `
+        .testCaseInputs!.map(
+            (input, index) => `
       <div class="sample-container">
         <div class="sample-box">
           <h2>예제 입력 ${index + 1}</h2>
@@ -128,19 +128,15 @@ export const ProblemHtmlForm = (problemData: problemData) => {
           <pre class="sampledata">${problemData.testCaseOutputs![index]}</pre>
         </div>
       </div>
-      ${
-        problemData.testCaseExplains![index] === undefined
-          ? ""
-          : `${problemData.testCaseExplains![index]}`
-      }
+      ${problemData.testCaseExplains![index] === undefined ? '' : `${problemData.testCaseExplains![index]}`}
     `
-      )
-      .join("")}
+        )
+        .join('')}
   </section>
 
   ${
-    problemData.hint!.trim() !== ""
-      ? `
+      problemData.hint!.trim() !== ''
+          ? `
     <section id="hint" class="problem-section">
       <div class="headline">
         <h2>힌트</h2>
@@ -150,18 +146,18 @@ export const ProblemHtmlForm = (problemData: problemData) => {
       </div>
     </section>
     `
-      : '<div id="hint" class="problem-section hidden"></div>'
+          : '<div id="hint" class="problem-section hidden"></div>'
   }
 
   ${
-    problemData.source !== null
-      ? `
+      problemData.source !== null
+          ? `
     <section id="source" class="problem-section">
       <div id="source" class="problem-text">
         ${problemData.source}
       </div>
     </section>`
-      : '<div id="source" class="problem-section hidden"></div>'
+          : '<div id="source" class="problem-section hidden"></div>'
   }
 </body>
 </html>
@@ -170,16 +166,16 @@ export const ProblemHtmlForm = (problemData: problemData) => {
 
 // 웹뷰에 전달할 테마 정보를 포함한 메시지를 생성하는 함수
 function createThemeMessage() {
-  const currentTheme = vscode.window.activeColorTheme.kind;
-  return { theme: currentTheme };
+    const currentTheme = vscode.window.activeColorTheme.kind;
+    return { theme: currentTheme };
 }
 
 function getThemeStyles() {
-  // 현재 테마를 가져와서 해당 테마에 따른 스타일을 반환하는 함수
-  const currentTheme = vscode.window.activeColorTheme.kind;
-  switch (currentTheme) {
-    case vscode.ColorThemeKind.Light:
-      return `
+    // 현재 테마를 가져와서 해당 테마에 따른 스타일을 반환하는 함수
+    const currentTheme = vscode.window.activeColorTheme.kind;
+    switch (currentTheme) {
+        case vscode.ColorThemeKind.Light:
+            return `
         code { background-color: #f2f2f2; padding: 2px 4px; border-radius: 4px; }
         pre {
           background-color: #f2f2f2;
@@ -187,8 +183,8 @@ function getThemeStyles() {
           font-size: 14px;
         }
       `;
-    case vscode.ColorThemeKind.Dark:
-      return `
+        case vscode.ColorThemeKind.Dark:
+            return `
         code { background-color: #2e2e2e; padding: 2px 4px; border-radius: 4px; }
         pre {
           background-color: #2e2e2e;
@@ -196,29 +192,25 @@ function getThemeStyles() {
           font-size: 14px;
         }
       `;
-    default:
-      return "";
-  }
+        default:
+            return '';
+    }
 }
 // =================================================================
 
 /**
  * @description 언어 별 생성 파일 내 주석 폼
  */
-export const juseokForm = (
-  lang: string,
-  problemData: problemData,
-  number: string
-): string => {
-  const date = new Date().toISOString().split("T")[0];
-  // Linux : 리눅스 / Darwin : 맥 / Windows_NT : 윈도우
-  const platform = os.type();
+export const juseokForm = (lang: string, problemData: problemData, number: string): string => {
+    const date = new Date().toISOString().split('T')[0];
+    // Linux : 리눅스 / Darwin : 맥 / Windows_NT : 윈도우
+    const platform = os.type();
 
-  /**
-   * @language 파이썬
-   */
-  if (lang === "py") {
-    return `#=====================================================================
+    /**
+     * @language 파이썬
+     */
+    if (lang === 'py') {
+        return `#=====================================================================
 #   ${number}번:    ${problemData.title}                   
 #   @date:   ${date}              
 #   @link:   https://www.acmicpc.net/problem/${number}  
@@ -231,11 +223,11 @@ import sys;
 input = sys.stdin.readline
 
 `;
-  } else if (lang === "cpp") {
-    /**
-     * @language C++
-     */
-    return `//=====================================================================
+    } else if (lang === 'cpp') {
+        /**
+         * @language C++
+         */
+        return `//=====================================================================
 //   ${number}번:    ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
@@ -254,12 +246,12 @@ int main() {
   return 0;
 }
 `;
-  } else if (lang === "java") {
-    /**
-     * @language 자바
-     */
+    } else if (lang === 'java') {
+        /**
+         * @language 자바
+         */
 
-    return `//=====================================================================
+        return `//=====================================================================
 //   ${number}번:    ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
@@ -276,11 +268,11 @@ public class Main {
 
 }
 `;
-  } else if (lang === "c") {
-    /**
-     * @language C언어
-     */
-    return `//=====================================================================
+    } else if (lang === 'c') {
+        /**
+         * @language C언어
+         */
+        return `//=====================================================================
 //   ${number}번:    ${problemData.title}                  
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
@@ -299,11 +291,11 @@ int main() {
   return 0;
 }
 `;
-  } else if (lang === "js") {
-    /**
-     * @language 자바스크립트 nodejs ( mac or windows )
-     */
-    return `//=====================================================================
+    } else if (lang === 'js') {
+        /**
+         * @language 자바스크립트 nodejs ( mac or windows )
+         */
+        return `//=====================================================================
 //   ${number}번: ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
@@ -326,7 +318,84 @@ let input = fs.readFileSync(inputFilePath).toString().split("\n");
 
 
 `;
-  } else {
-    return "";
-  }
+    } else {
+        return '';
+    }
+};
+
+export const ReadmeForm = (number: string | undefined, problemData: problemData) => {
+    const limitSection = problemData!.limit?.trim()
+        ? `제한 시간 : ${problemData!.limit!.split(' ')[0]} 초\n제한 메모리 : ${problemData!.limit!.split(' ')[1]} MB\n`
+        : '';
+
+    const testCases =
+        problemData!.testCaseInputs && problemData!.testCaseOutputs
+            ? problemData!.testCaseInputs
+                  .map((input, index) => {
+                      const output = problemData!.testCaseOutputs![index];
+                      return `
+### 예제 입력 ${index + 1}
+
+\`\`\`
+${input}
+\`\`\`
+
+### 예제 출력 ${index + 1}
+
+\`\`\`
+${output}
+\`\`\`
+          `;
+                  })
+                  .join('\n')
+            : '';
+
+    return `# ${number}번: ${problemData!.title}
+
+## 문제 설명
+
+${problemData!.description}
+
+## 입력 형식
+
+${problemData!.input}
+
+## 출력 형식
+
+${problemData!.output}
+
+## 예제
+${testCases}
+
+${limitSection ? '## 제한' : ''}
+${limitSection}
+
+## 추가 테스트 케이스
+
+추가로 테스트 하고 싶은 케이스를 적고 정리해 보세요.
+
+### 추가 입력 1
+
+\`\`\`
+<입력값>
+\`\`\`
+
+### 추가 출력 1
+
+\`\`\`
+<출력값>
+\`\`\`
+
+### 추가 입력 2
+
+\`\`\`
+<입력값>
+\`\`\`
+
+### 추가 출력 2
+
+\`\`\`
+<출력값>
+\`\`\`
+  `;
 };
