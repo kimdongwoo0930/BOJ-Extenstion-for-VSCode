@@ -11,3 +11,8 @@
   - C, C++, javascript 파일 생성시 작성 내용 수정
   - console.log 제거
   - import 최적화
+
+- #### [ 0.0.4 ] 2024-07-31
+  - ReadMe.md 파일 Form 변경
+  - 함수 주석 정리
+  - 코드 걸리는 시간 표시 ( 임시 )
