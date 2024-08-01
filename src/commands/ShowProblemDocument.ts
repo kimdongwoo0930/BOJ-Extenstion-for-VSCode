@@ -28,7 +28,20 @@ export const showProblem = (
   panel.webview.html = ProblemHtmlForm(problemData!);
 };
 
-/**
- *
- * 참고 : https://github.com/dltkdgns00/BOJ-extension/blob/main/src/commands/showProblem.ts
- */
+export const showProblemToHtml = (
+  html: string,
+  context: vscode.ExtensionContext
+) => {
+  // 웹뷰 생성
+  const panel = vscode.window.createWebviewPanel(
+    "problemPreview",
+    "",
+    vscode.ViewColumn.Two,
+    {
+      enableScripts: true,
+    }
+  );
+
+  // 웹뷰에 백준 온라인 저지 스타일과 문제 데이터 출력
+  panel.webview.html = html;
+};

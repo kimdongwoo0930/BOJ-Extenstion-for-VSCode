@@ -5,7 +5,7 @@ import * as vscode from "vscode";
 
 import { InputProblemNumber } from "./commands/getProblemByNumber";
 import { checkTestCase } from "./commands/checkTestCase";
-import { showDocument } from "./commands/showDocument";
+import { showDocument, showDocumentWithoutFile } from "./commands/showDocument";
 import { getHint } from "./commands/GPT-API/hint";
 
 // 확장이 활성화되면 이 메서드가 호출됩니다
@@ -18,7 +18,6 @@ export function activate(context: vscode.ExtensionContext) {
   /**
    * gpt 익스텐션을 위해 API키를 넣어야 한다.
    */
-  
 
   // package.json 파일에 명령이 정의되었습니다
   // 이제 registerCommand로 명령 구현을 제공합니다
@@ -62,14 +61,25 @@ export function activate(context: vscode.ExtensionContext) {
   );
 
   /**
-   * 문제 다시보기
+   * 문제 다시보기 ( html파일 없이 )
+   */
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "boj-extension-for-vscode.showProblemWithdoutFile",
+      () => {
+        showDocumentWithoutFile(context);
+        //vscode.window.showInformationMessage("문제 다시보기");
+      }
+    )
+  );
+  /**
+   * 현재 풀고 있는 문제 보기
    */
   context.subscriptions.push(
     vscode.commands.registerCommand(
       "boj-extension-for-vscode.showProblem",
       () => {
         showDocument(context);
-        //vscode.window.showInformationMessage("문제 다시보기");
       }
     )
   );
