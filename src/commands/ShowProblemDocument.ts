@@ -1,6 +1,6 @@
-import * as vscode from "vscode";
-import { problemData } from "../types/problemData";
-import { ProblemHtmlForm } from "../utils/makeForm";
+import * as vscode from 'vscode';
+import { problemData } from '../types/problemData';
+import { ProblemHtmlForm } from '../utils/makeForm';
 
 /**
  * @TItle 문제 문서 보여주기
@@ -8,40 +8,27 @@ import { ProblemHtmlForm } from "../utils/makeForm";
  * @param context vscode.ExtensionContext
  */
 export const showProblem = (
-  number: string | undefined,
-  problemData: problemData | void,
-  context: vscode.ExtensionContext
+    number: string | undefined,
+    problemData: problemData | void,
+    context: vscode.ExtensionContext
 ) => {
-  const title = `${number}번: ${problemData!.title}`;
+    const title = `${number}번: ${problemData!.title}`;
 
-  // 웹뷰 생성
-  const panel = vscode.window.createWebviewPanel(
-    "problemPreview",
-    `${title}`,
-    vscode.ViewColumn.Two,
-    {
-      enableScripts: true,
-    }
-  );
+    // 웹뷰 생성
+    const panel = vscode.window.createWebviewPanel('problemPreview', `${title}`, vscode.ViewColumn.Two, {
+        enableScripts: true,
+    });
 
-  // 웹뷰에 백준 온라인 저지 스타일과 문제 데이터 출력
-  panel.webview.html = ProblemHtmlForm(problemData!);
+    // 웹뷰에 백준 온라인 저지 스타일과 문제 데이터 출력
+    panel.webview.html = ProblemHtmlForm(problemData!);
 };
 
-export const showProblemToHtml = (
-  html: string,
-  context: vscode.ExtensionContext
-) => {
-  // 웹뷰 생성
-  const panel = vscode.window.createWebviewPanel(
-    "problemPreview",
-    "",
-    vscode.ViewColumn.Two,
-    {
-      enableScripts: true,
-    }
-  );
+export const showProblemToHtml = (html: string, context: vscode.ExtensionContext) => {
+    // 웹뷰 생성
+    const panel = vscode.window.createWebviewPanel('problemPreview', '현재 문제', vscode.ViewColumn.Two, {
+        enableScripts: true,
+    });
 
-  // 웹뷰에 백준 온라인 저지 스타일과 문제 데이터 출력
-  panel.webview.html = html;
+    // 웹뷰에 백준 온라인 저지 스타일과 문제 데이터 출력
+    panel.webview.html = html;
 };
