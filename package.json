@@ -2,9 +2,10 @@
   "name": "boj-extension-for-vscode",
   "displayName": "BOJ Extension for VSCode - Beta",
   "description": "백준 온라인 문제를 VS Code에서 풀어보자.",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "author": "Dong",
   "publisher": "Dong",
+  "icon": "images/logo.png",
   "engines": {
     "vscode": "^1.91.0"
   },
@@ -14,6 +15,17 @@
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
+    "configuration": {
+      "type": "object",
+      "title": "Your Extension Settings",
+      "properties": {
+        "BOJ-EX.GPT-API": {
+          "type": "string",
+          "default": "",
+          "description": "GPT API키를 넣어주세요."
+        }
+      }
+    },
     "commands": [
       {
         "command": "boj-extension-for-vscode.getProblemByNumber",
@@ -26,6 +38,10 @@
       {
         "command": "boj-extension-for-vscode.showProblem",
         "title": "BOJ: 문제 보기"
+      },
+      {
+        "command": "boj-extension-for-vscode.gpt-hint",
+        "title": "BOJ: 힌트 물어보기"
       }
     ]
   },
