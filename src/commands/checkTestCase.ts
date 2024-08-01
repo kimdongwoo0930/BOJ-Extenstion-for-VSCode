@@ -249,7 +249,7 @@ const getHtmlFileNames = (folderPath: string): string[] => {
 };
 
 // 현재 파일의 폴더 내 HTML 파일 이름을 가져오는 함수
-const getHtmlFilesInSameFolder = (document: vscode.TextDocument): string[] => {
+export const getHtmlFilesInSameFolder = (document: vscode.TextDocument): string[] => {
     const folderPath = getFolderPath(document.fileName);
     return getHtmlFileNames(folderPath);
 };
