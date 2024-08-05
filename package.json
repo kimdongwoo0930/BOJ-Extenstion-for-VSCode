@@ -2,7 +2,7 @@
     "name": "boj-extension-for-vscode",
     "displayName": "BOJ Extension for VSCode - Beta",
     "description": "백준 온라인 문제를 VS Code에서 풀어보자.",
-    "version": "0.0.8",
+    "version": "0.0.9",
     "author": "Dong",
     "publisher": "Dong",
     "icon": "images/logo.png",
@@ -44,8 +44,16 @@
                 "title": "BOJ: 현재 문제 보기"
             },
             {
-                "command": "boj-extension-for-vscode.gpt-hint",
-                "title": "BOJ: GPT한테 힌트 물어보기 ( 개발중 )"
+                "command": "boj-extension-for-vscode.gptHint",
+                "title": "BOJ: 힌트 보기 ( 개발중 )"
+            },
+            {
+                "command": "boj-extension-for-vscode.gptSolution",
+                "title": "BOJ: 해설 보기 ( 개발중 )"
+            },
+            {
+                "command": "boj-extension-for-vscode.gptAnswer",
+                "title": "BOJ: 코드 최적화 하기  ( 개발중 )"
             }
         ]
     },
@@ -83,6 +91,8 @@
         "cheerio": "^1.0.0-rc.12",
         "child_process": "^1.0.2",
         "jsdom": "^24.1.0",
+        "openai": "^4.54.0",
+        "openapi": "^1.0.1",
         "rss-parser": "^3.13.0",
         "utf-8-validate": "^6.0.4",
         "xmldom": "^0.6.0"
