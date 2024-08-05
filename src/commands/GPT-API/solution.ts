@@ -53,7 +53,27 @@ export const getSolution = (context: vscode.ExtensionContext) => {
   getSolutionAPI(apiKey, number, langName);
 };
 
+let lastHintRequest: number = 0;
+const HINT_REQUEST_INTERVAL = 1800000; // 5 minutes
+
+/**
+ * @title GPT 한테 해설 물어보기
+ * @Description GPT-4o-mini 모델을 사용하여 문제 번호를 통해 해설을 가져오는 함수이다.
+ * @쿨타임 30분
+ * @토큰 1000토큰
+ * @param apiKey api키
+ * @param number 문제 번호
+ * @param lang 언어
+ */
 const getSolutionAPI = async (apiKey: string, number: string, lang: string) => {
+  const now = Date.now();
+  if (now - lastHintRequest < HINT_REQUEST_INTERVAL) {
+    vscode.window.showInformationMessage("힌트 요청은 5분마다 가능합니다.");
+    return;
+  }
+
+  lastHintRequest = now;
+
   const client = new OpenAI({
     apiKey: apiKey, // This is the default and can be omitted
   });
@@ -102,7 +122,7 @@ const getSolutionAPI = async (apiKey: string, number: string, lang: string) => {
   }
 };
 
-const getLangName = (lang: string) => {
+export const getLangName = (lang: string) => {
   switch (lang) {
     case "py":
       return "Python";
@@ -118,19 +138,6 @@ const getLangName = (lang: string) => {
       return "Unknown";
   }
 };
-
-function centerText(text: string, maxWidth: number) {
-  const padding = Math.max(0, maxWidth - text.length);
-  const paddingLeft = Math.floor(padding / 2);
-  const paddingRight = padding - paddingLeft;
-  return (
-    " ".repeat(paddingLeft - 1) +
-    " " +
-    text +
-    " " +
-    " ".repeat(paddingRight - 1)
-  );
-}
 
 /**
  * 해설 내용을 주리할 markdown 파일을 만들어줘야한다.
