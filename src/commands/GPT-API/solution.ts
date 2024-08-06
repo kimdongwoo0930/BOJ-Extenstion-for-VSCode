@@ -1,13 +1,26 @@
+import { problemData } from "./../../types/problemData";
 import * as vscode from "vscode";
 import { getHtmlFilesInSameFolder } from "../checkTestCase";
 import * as path from "path";
 import OpenAI from "openai";
 import * as fs from "fs";
+import { getLangName } from "../../types/fileNameType";
 
+import dotenv from "dotenv";
+import { getSolutionForm, markdownForm } from "../../types/solutionForm";
+import { getProblemData } from "../../utils/getProblemData";
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
+
+/**
+ * @Title 해설 제공 함수
+ * @param context vscode.ExtensionContext
+ * @returns
+ */
 export const getSolution = (context: vscode.ExtensionContext) => {
-  const apiKey = vscode.workspace
-    .getConfiguration("BOJ-EX")
-    .get<string>("GPT-API");
+  // const apiKey = vscode.workspace
+  //   .getConfiguration("BOJ-EX")
+  //   .get<string>("GPT-API");
+  const apiKey = process.env.OPENAI_API_KEY;
 
   if (!apiKey) {
     vscode.window.showErrorMessage("설정에서 OpenAI API키를 입력해주세요.");
@@ -53,100 +66,88 @@ export const getSolution = (context: vscode.ExtensionContext) => {
   getSolutionAPI(apiKey, number, langName);
 };
 
-let lastHintRequest: number = 0;
-const HINT_REQUEST_INTERVAL = 1800000; // 5 minutes
-
 /**
  * @title GPT 한테 해설 물어보기
  * @Description GPT-4o-mini 모델을 사용하여 문제 번호를 통해 해설을 가져오는 함수이다.
  * @쿨타임 30분
- * @토큰 1000토큰
+ * @토큰 2000토큰
  * @param apiKey api키
  * @param number 문제 번호
  * @param lang 언어
  */
 const getSolutionAPI = async (apiKey: string, number: string, lang: string) => {
+  let lastHintRequest: number = 0;
+  const HINT_REQUEST_INTERVAL = 1800000; // 30 minutes
   const now = Date.now();
   if (now - lastHintRequest < HINT_REQUEST_INTERVAL) {
-    vscode.window.showInformationMessage("힌트 요청은 5분마다 가능합니다.");
+    const remainingTime = HINT_REQUEST_INTERVAL - (now - lastHintRequest); // 남은 시간 계산
+    const remainingSeconds = Math.max(0, Math.ceil(remainingTime / 1000));
+    vscode.window.showInformationMessage(
+      "해설 요청은 30분마다 가능합니다.  " +
+        `( 남은시간 : ${Math.floor(remainingSeconds / 60)}분 )`
+    );
     return;
   }
-
   lastHintRequest = now;
 
-  const client = new OpenAI({
-    apiKey: apiKey, // This is the default and can be omitted
-  });
+  await vscode.window.withProgress(
+    {
+      location: vscode.ProgressLocation.Window,
+      title: "해설 생성중....",
+      cancellable: false, // 사용자가 취소할 수 없도록 설정
+    },
+    async (process) => {
+      const client = new OpenAI({
+        apiKey: apiKey, // This is the default and can be omitted
+      });
 
-  const resultConsole = vscode.window.createOutputChannel("Solution");
-  resultConsole.show(true);
-  const url = `https://www.acmicpc.net/problem/${number}`;
+      const resultConsole = vscode.window.createOutputChannel("Solution");
+      resultConsole.show(true);
+      const url = `https://www.acmicpc.net/problem/${number}`;
 
-  const question = `
-        문제 URL: ${url}에 있는 문제를 ${lang} 언어로 해결해 주세요. 
-        문제의 조건, 입력 형식, 출력 형식 등을 고려하여 해결 방법과 코드를 제공해 주시고, 각 단계에 대한 설명도 포함해 주세요. 
+      const problemData: problemData = await getProblemData(number);
 
-        특히, 다음 사항을 포함해 주세요:
-        1. 문제를 해결하기 위한 알고리즘 설명
-        2. 코드를 작성하는 방법 및 논리
-        3. 코드의 각 부분에 대한 설명
-        4. 예제 입력과 출력에 대한 테스트
+      const question = getSolutionForm({ number, problemData, language: lang });
 
-        답변은 1000토큰 이내로 부탁드립니다.
-`;
+      try {
+        const response = await client.chat.completions.create({
+          messages: [{ role: "user", content: question }],
+          model: "gpt-4o-mini",
+          max_tokens: 1500,
+        });
 
-  try {
-    const response = await client.chat.completions.create({
-      messages: [{ role: "user", content: question }],
-      model: "gpt-4o-mini",
-      max_tokens: 1000,
-    });
+        const content = markdownForm(
+          number,
+          lang,
+          response.choices[0].message.content!
+        );
 
-    const content = markdownForm(
-      number,
-      lang,
-      response.choices[0].message.content!
-    );
-
-    await makeMarkDownFile(content);
-  } catch (error: any) {
-    if (error.status === 401) {
-      resultConsole.appendLine("OpenAI API키가 잘못되었습니다.");
-    } else {
-      resultConsole.appendLine("-".repeat(50));
-      resultConsole.appendLine("힌트 요청 중 오류 발생:");
-      resultConsole.appendLine("-".repeat(50));
-      resultConsole.appendLine(error.message || "알 수 없는 오류 발생");
-      resultConsole.appendLine("-".repeat(50));
+        await makeMarkDownFile(content);
+      } catch (error: any) {
+        if (error.status === 401) {
+          resultConsole.appendLine("OpenAI API키가 잘못되었습니다.");
+        } else {
+          resultConsole.appendLine("-".repeat(50));
+          resultConsole.appendLine("힌트 요청 중 오류 발생:");
+          resultConsole.appendLine("-".repeat(50));
+          resultConsole.appendLine(error.message || "알 수 없는 오류 발생");
+          resultConsole.appendLine("-".repeat(50));
+        }
+      }
     }
-  }
-};
-
-export const getLangName = (lang: string) => {
-  switch (lang) {
-    case "py":
-      return "Python";
-    case "c":
-      return "C";
-    case "cpp":
-      return "C++";
-    case "js":
-      return "JavaScript";
-    case "java":
-      return "Java";
-    default:
-      return "Unknown";
-  }
+  );
 };
 
 /**
- * 해설 내용을 주리할 markdown 파일을 만들어줘야한다.
+ * @title GPT응답을 마크다운 파일로 제작 함수
+ * @param content GPT 응답 내용 : ;
+ * @returns
  */
 const makeMarkDownFile = async (content: string) => {
   const editor = vscode.window.activeTextEditor;
 
   if (!editor) {
-    vscode.window.showErrorMessage("No active editor found.");
+    vscode.window.showErrorMessage("파일을 열고 다시 시도해주세요.");
     return;
   }
 
@@ -169,29 +170,11 @@ const makeMarkDownFile = async (content: string) => {
     await fs.promises.writeFile(filePath, content, "utf8");
 
     vscode.window.showInformationMessage(
-      `Markdown file created successfully: ${filePath}`
+      `문제 폴더에 solution.md 파일이 생성되었습니다.`
     );
   } catch (error) {
     // Log the error and show a message
     console.error(`Error writing file: ${error}`);
     vscode.window.showErrorMessage(`Error writing markdown file: ${error}`);
   }
-};
-
-const markdownForm = (number: string, lang: string, content: string) => {
-  return `
-# 🧩 솔루션
-
-## 문제 URL
-[문제 링크](https://www.acmicpc.net/problem/${number})
-
-## 언어
-${lang}
-
-## 해설 
-${content}
-
----
-
-*This solution is powered by GPT.4o-mini*`;
 };

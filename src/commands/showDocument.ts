@@ -27,7 +27,7 @@ export const showDocumentWithoutFile = (context: vscode.ExtensionContext) => {
       // ProblemData도 만들어줘야한다.
       const problemData: problemData | void = await getProblemData(number);
       if (problemData === undefined) {
-        vscode.window.showErrorMessage("문제를 가져오는데 실��했습니다.");
+        vscode.window.showErrorMessage("문제를 가져오는데 실패했습니다.");
         return;
       }
       // 문제를 showProblemDocument로 넘겨주면 된다.

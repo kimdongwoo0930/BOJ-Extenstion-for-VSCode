@@ -413,6 +413,12 @@ ${limitSection}
   `;
 };
 
+/**
+ * @title 최대 길이를 받아 문구를 가운데에 표시해주는 함수
+ * @param text 문구
+ * @param maxWidth 최대 길이
+ * @returns
+ */
 export function centerText(text: string, maxWidth: number) {
   const padding = Math.max(0, maxWidth - text.length);
   const paddingLeft = Math.floor(padding / 2);
@@ -425,3 +431,61 @@ export function centerText(text: string, maxWidth: number) {
     "=".repeat(paddingRight - 1)
   );
 }
+
+// =================================================================
+/**
+ * @title 확장자에 따른 입력방식 설명
+ */
+export const InputForm = (lang: string) => {
+  switch (lang) {
+    case "c":
+      return `#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+  int T;
+  scanf("%d", &T);
+              
+  return 0;
+}`;
+    case "cpp":
+      return `#include <iostream>
+using namespace std;
+            
+int main() {
+  int t;
+	cin >> t;
+
+  
+  return 0;
+}`;
+    case "java":
+      return `import java.util.*;
+
+public class Main {
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+  }
+
+}`;
+    case "js":
+      return `// 백준 제출전 입력코드를 아래 코드로 수정해주세요.
+// const input = require("fs").readFileSync("/dev/stdin").toString().split("\\n");
+ 
+
+// node.js는 각각의 OS에서 같은 방법으로 테스트하기위해 input.txt를 통해 테스트를 진행합니다.
+// 테스트를 위해 아래 코드를 이용해 주세요.
+const fs = require("fs");
+const path = require("path");
+
+const inputFilePath = path.join(__dirname, "input.txt");
+let input = fs.readFileSync(inputFilePath).toString().split("\n");
+`;
+    case "py":
+      return `
+import sys;
+
+input = sys.stdin.readline`;
+  }
+};

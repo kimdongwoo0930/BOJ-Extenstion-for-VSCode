@@ -7,7 +7,7 @@ import * as fs from "fs";
 import * as os from "os";
 import { centerText } from "../utils/makeForm";
 /**
- * **checkTestCase** 함수는 현재 열린 코드 파일에 대해
+ * @description 함수는 현재 열린 코드 파일에 대해
  * 주어진 문제의 테스트 케이스를 실행하고 결과를 VSCode의
  * 출력 채널에 표시합니다.
  *
@@ -60,7 +60,6 @@ export const checkTestCase = async (context: vscode.ExtensionContext) => {
       );
       resultConsole.appendLine(message_1);
 
-      let command: string;
       for (let i = 0; i < problemData.testCaseInputs!.length; i++) {
         await runCommand(
           lang,
@@ -176,6 +175,8 @@ const runCommand = async (
   });
 };
 
+// =================================================================
+
 /**
  * **processSetting** 함수는 주어진 언어와 파일 경로에 따라
  * 적절한 프로세스를 생성하고 반환합니다.
@@ -230,6 +231,8 @@ const processSetting = (lang: string, filePath: string) => {
   }
 };
 
+// =================================================================
+
 const resultMessage = (index: number, resultConsole: vscode.OutputChannel) => {
   // 테스트 케이스 결과 메세지
   /**
@@ -239,6 +242,8 @@ const resultMessage = (index: number, resultConsole: vscode.OutputChannel) => {
    * fail
    */
 };
+
+// =================================================================
 
 /**
  * **getHtmlFileNames** 함수는 지정된 폴더 내의 HTML 파일 이름을 가져옵니다.
@@ -264,7 +269,6 @@ export const getHtmlFilesInSameFolder = (
   const folderPath = getFolderPath(document.fileName);
   return getHtmlFileNames(folderPath);
 };
-
 // 현재 파일의 경로에서 폴더 경로를 가져오는 함수
 const getFolderPath = (filePath: string): string => {
   return path.dirname(filePath);

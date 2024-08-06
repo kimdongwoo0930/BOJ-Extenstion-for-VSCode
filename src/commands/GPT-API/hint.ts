@@ -1,10 +1,13 @@
 import * as vscode from "vscode";
 import * as path from "path";
-import dotenv from "dotenv";
-dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 import { getHtmlFilesInSameFolder } from "../checkTestCase";
 
+/**
+ * @Title 힌트 제공 함수
+ * @param context vscode.ExtensionContext
+ * @returns
+ */
 export const getHint = (context: vscode.ExtensionContext) => {
   // api key 가져오기
   //   const apiKey = vscode.workspace
@@ -43,23 +46,30 @@ export const getHint = (context: vscode.ExtensionContext) => {
 
 import OpenAI from "openai";
 import { centerText } from "../../utils/makeForm";
-import { getLangName } from "./solution";
-
-let lastHintRequest: number = 0;
-const HINT_REQUEST_INTERVAL = 300000; // 5 minutes
+import { getLangName } from "../../types/fileNameType";
+import { getProblemData } from "../../utils/getProblemData";
+import { getHintForm } from "../../types/hintForm";
 
 /**
  * @title GPT 한테 힌트 물어보기
  * @Description GPT-4o-mini 모델을 사용하여 문제 번호를 통해 힌트를 받아오는 함수이다.
  * @쿨타임 5분
- * @토큰 200토큰
+ * @토큰 500토큰
  * @param apiKey api키
  * @param number 문제 번호
  */
 const getHintAPI = async (apiKey: string, number: string) => {
+  let lastHintRequest: number = 0;
+  const HINT_REQUEST_INTERVAL = 300000; // 5 minutes
+
   const now = Date.now();
   if (now - lastHintRequest < HINT_REQUEST_INTERVAL) {
-    vscode.window.showInformationMessage("힌트 요청은 5분마다 가능합니다.");
+    const remainingTime = HINT_REQUEST_INTERVAL - (now - lastHintRequest); // 남은 시간 계산
+    const remainingSeconds = Math.max(0, Math.ceil(remainingTime / 1000));
+    vscode.window.showInformationMessage(
+      "힌트 요청은 5분마다 가능합니다.  " +
+        `( 남은시간 : ${Math.floor(remainingSeconds / 60)}분 )`
+    );
     return;
   }
 
@@ -82,20 +92,15 @@ const getHintAPI = async (apiKey: string, number: string) => {
   const document = editor.document;
   const lang = path.extname(document?.fileName).replace(".", "").trim();
   const language = getLangName(lang);
-
-  const question = `
-  I am currently working on a problem available at ${url} and I am solving it using ${language}. Could you provide me with a hint instead of the full solution? 
-
-Specifically, I am looking for:
-- Guidance on the key algorithm or approach to solve the problem
-- Important steps or strategies that could help in solving the problem
-
-
-Please respond in Korean ans provide a concise hint within 200 tokens. Thank you!`;
+  // 정확한 답을 가져오기위해서는 문제를 파싱 후 그 데이터를 가지고 질문을 해야한다.
+  const problemData = await getProblemData(number);
+  const questions = getHintForm({
+    number,
+    problemData,
+    language,
+  });
   resultConsole.clear();
-
   resultConsole.appendLine("-".repeat(50));
-
   resultConsole.appendLine(`# 문제 주소: ${url}`);
   resultConsole.appendLine("-".repeat(50));
   resultConsole.appendLine(centerText("💡 힌트", 48));
@@ -103,9 +108,9 @@ Please respond in Korean ans provide a concise hint within 200 tokens. Thank you
 
   try {
     const response = await client.chat.completions.create({
-      messages: [{ role: "user", content: question }],
+      messages: [{ role: "user", content: questions }],
       model: "gpt-4o-mini",
-      max_tokens: 200,
+      max_tokens: 500,
       stream: true,
     });
 
