@@ -50,6 +50,9 @@ import { getLangName } from "../../types/fileNameType";
 import { getProblemData } from "../../utils/getProblemData";
 import { getHintForm } from "../../types/hintForm";
 
+let lastHintRequest: number = 0;
+const HINT_REQUEST_INTERVAL = 300000; // 5 minutes
+
 /**
  * @title GPT 한테 힌트 물어보기
  * @Description GPT-4o-mini 모델을 사용하여 문제 번호를 통해 힌트를 받아오는 함수이다.
@@ -59,9 +62,6 @@ import { getHintForm } from "../../types/hintForm";
  * @param number 문제 번호
  */
 const getHintAPI = async (apiKey: string, number: string) => {
-  let lastHintRequest: number = 0;
-  const HINT_REQUEST_INTERVAL = 300000; // 5 minutes
-
   const now = Date.now();
   if (now - lastHintRequest < HINT_REQUEST_INTERVAL) {
     const remainingTime = HINT_REQUEST_INTERVAL - (now - lastHintRequest); // 남은 시간 계산

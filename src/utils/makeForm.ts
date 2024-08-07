@@ -322,7 +322,7 @@ const fs = require("fs");
 const path = require("path");
 
 const inputFilePath = path.join(__dirname, "input.txt");
-let input = fs.readFileSync(inputFilePath).toString().split("\n");
+let input = fs.readFileSync(inputFilePath).toString().split("\\n");
 
 
 `;
@@ -470,12 +470,7 @@ public class Main {
 
 }`;
     case "js":
-      return `// 백준 제출전 입력코드를 아래 코드로 수정해주세요.
-// const input = require("fs").readFileSync("/dev/stdin").toString().split("\\n");
- 
-
-// node.js는 각각의 OS에서 같은 방법으로 테스트하기위해 input.txt를 통해 테스트를 진행합니다.
-// 테스트를 위해 아래 코드를 이용해 주세요.
+      return `
 const fs = require("fs");
 const path = require("path");
 

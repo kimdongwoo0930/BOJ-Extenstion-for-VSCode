@@ -42,8 +42,8 @@
         "title": "BOJ: 힌트 보기"
       },
       {
-        "command": "boj-extension-for-vscode.gptSolution",
-        "title": "BOJ: 해설 보기 "
+        "command": "boj-extension-for-vscode.gptSolution_fast",
+        "title": "BOJ: 해설 보기"
       },
       {
         "command": "boj-extension-for-vscode.gptAnswer",

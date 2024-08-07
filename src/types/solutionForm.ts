@@ -22,25 +22,43 @@ export const getSolutionForm = ({
   const cleanOutput = problemData.output?.replace(/<[^>]+>/g, " ");
 
   const inputForm = InputForm(language);
+  const url = `https://www.acmicpc.net/problem/${number}`;
+
+  const testCaseDetails = problemData
+    .testCaseInputs!.map((input, index) => {
+      const explain = problemData.testCaseExplains
+        ? problemData.testCaseExplains[index]
+        : "";
+      const output = problemData.testCaseOutputs
+        ? problemData.testCaseOutputs[index]
+        : "";
+      return `
+      테스트 케이스 ${index + 1}:
+      입력: ${input}
+      출력: ${output}
+      설명: ${explain}
+    `;
+    })
+    .join("\n"); //
 
   return `
+
+  url : ${url}
   문제 ${number}번을 ${language} 언어로 해설을해주세요.
 
     설명: ${cleanDescription}
     입력: ${cleanInput}
     출력: ${cleanOutput}
     제약: ${cleanLimit}
-    예제:
-      입력: ${problemData.testCaseInputs!}
-      출력: ${problemData.testCaseOutputs!}
+    예제: ${testCaseDetails}
+    
+    전체 코드를 제공하는 대신, 문제 해결을 위한 핵심 알고리즘 부분만 제공해 주세요. 코드를 어떻게 작성할지에 대한 설명과 함께, 필요한 부분의 알고리즘을 설명해 주시면 좋겠습니다.
 
     특히, 다음 사항을 포함해 주세요:
         1. 문제를 해결하기 위한 알고리즘 설명
         2. 코드를 작성하는 방법 및 논리
         3. 코드의 각 부분에 대한 설명
-        4. 예제 입력과 출력에 대한 테스트
     
-    코드작성시 ${inputForm}을 사용한 코드로 작성해주세요.
     `;
 };
 
@@ -73,7 +91,7 @@ ${content}
 
 ---
 
-**경고:** 위 코드는 특정 환경이나 조건에서만 정상적으로 실행될 수 있으며, 예상치 못한 오류가 발생할 수 있습니다. 실행 전에 충분한 검토와 테스트를 권장합니다.
+**경고:** 위 코드는 참고용으로만 제공되며, 실제로 정상적으로 작동하지 않을 수 있습니다. 코드 실행 전에 충분한 검토와 테스트를 권장합니다. 예상치 못한 오류나 문제 발생 시, 코드 수정이 필요할 수 있습니다.
 
 *This solution is powered by GPT.4o-mini*`;
 };

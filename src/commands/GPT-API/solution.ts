@@ -1,4 +1,4 @@
-import { problemData } from "./../../types/problemData";
+import { problemData } from "../../types/problemData";
 import * as vscode from "vscode";
 import { getHtmlFilesInSameFolder } from "../checkTestCase";
 import * as path from "path";
@@ -9,6 +9,7 @@ import { getLangName } from "../../types/fileNameType";
 import dotenv from "dotenv";
 import { getSolutionForm, markdownForm } from "../../types/solutionForm";
 import { getProblemData } from "../../utils/getProblemData";
+import { centerText } from "../../utils/makeForm";
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 /**
@@ -16,7 +17,7 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
  * @param context vscode.ExtensionContext
  * @returns
  */
-export const getSolution = (context: vscode.ExtensionContext) => {
+export const getSolution = (context: vscode.ExtensionContext, type: string) => {
   // const apiKey = vscode.workspace
   //   .getConfiguration("BOJ-EX")
   //   .get<string>("GPT-API");
@@ -63,9 +64,11 @@ export const getSolution = (context: vscode.ExtensionContext) => {
 
   console.log(number);
 
-  getSolutionAPI(apiKey, number, langName);
+  getSolutionAPI(apiKey, number, langName, type);
 };
 
+let lastHintRequest: number = 0;
+const HINT_REQUEST_INTERVAL = 1800000; // 30 minutes
 /**
  * @title GPT 한테 해설 물어보기
  * @Description GPT-4o-mini 모델을 사용하여 문제 번호를 통해 해설을 가져오는 함수이다.
@@ -75,9 +78,12 @@ export const getSolution = (context: vscode.ExtensionContext) => {
  * @param number 문제 번호
  * @param lang 언어
  */
-const getSolutionAPI = async (apiKey: string, number: string, lang: string) => {
-  let lastHintRequest: number = 0;
-  const HINT_REQUEST_INTERVAL = 1800000; // 30 minutes
+const getSolutionAPI = async (
+  apiKey: string,
+  number: string,
+  lang: string,
+  type: string
+) => {
   const now = Date.now();
   if (now - lastHintRequest < HINT_REQUEST_INTERVAL) {
     const remainingTime = HINT_REQUEST_INTERVAL - (now - lastHintRequest); // 남은 시간 계산
@@ -90,6 +96,7 @@ const getSolutionAPI = async (apiKey: string, number: string, lang: string) => {
   }
   lastHintRequest = now;
 
+  // 해설 생성 시작
   await vscode.window.withProgress(
     {
       location: vscode.ProgressLocation.Window,
@@ -103,26 +110,43 @@ const getSolutionAPI = async (apiKey: string, number: string, lang: string) => {
 
       const resultConsole = vscode.window.createOutputChannel("Solution");
       resultConsole.show(true);
-      const url = `https://www.acmicpc.net/problem/${number}`;
+      resultConsole.appendLine("-".repeat(50));
+      resultConsole.appendLine(centerText(`${number}번 문제 해설`, 48));
+      resultConsole.appendLine("-".repeat(50));
 
+      resultConsole.appendLine("질문 생성중....");
       const problemData: problemData = await getProblemData(number);
 
       const question = getSolutionForm({ number, problemData, language: lang });
+      resultConsole.appendLine("질문 생성 완료");
+      resultConsole.appendLine("-".repeat(50));
+
+      resultConsole.appendLine("해설 요청중....");
 
       try {
         const response = await client.chat.completions.create({
-          messages: [{ role: "user", content: question }],
-          model: "gpt-4o-mini",
-          max_tokens: 1500,
+          messages: [
+            {
+              role: "system",
+              content:
+                "이 모델은 알고리즘 문제를 해결하는 데 도움을 주거나 해결하는 데 특화되어 있습니다. 최대한 효율적이고 정확한 코드를 제공합니다.",
+            },
+            { role: "user", content: question },
+          ],
+          model: type,
+          max_tokens: 2000,
         });
+        resultConsole.appendLine("해설 요청 완료");
 
+        resultConsole.appendLine("-".repeat(50));
+        resultConsole.appendLine("파일 생성중....");
         const content = markdownForm(
           number,
           lang,
           response.choices[0].message.content!
         );
 
-        await makeMarkDownFile(content);
+        await makeMarkDownFile(content, resultConsole);
       } catch (error: any) {
         if (error.status === 401) {
           resultConsole.appendLine("OpenAI API키가 잘못되었습니다.");
@@ -143,7 +167,10 @@ const getSolutionAPI = async (apiKey: string, number: string, lang: string) => {
  * @param content GPT 응답 내용 : ;
  * @returns
  */
-const makeMarkDownFile = async (content: string) => {
+const makeMarkDownFile = async (
+  content: string,
+  resultConsole: vscode.OutputChannel
+) => {
   const editor = vscode.window.activeTextEditor;
 
   if (!editor) {
@@ -168,6 +195,8 @@ const makeMarkDownFile = async (content: string) => {
 
     // Write the content to the file
     await fs.promises.writeFile(filePath, content, "utf8");
+    resultConsole.appendLine("파일 생성 완료");
+    resultConsole.appendLine("-".repeat(50));
 
     vscode.window.showInformationMessage(
       `문제 폴더에 solution.md 파일이 생성되었습니다.`
