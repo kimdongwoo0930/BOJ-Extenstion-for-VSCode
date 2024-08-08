@@ -118,6 +118,7 @@ const getSolutionAPI = async (
       const problemData: problemData = await getProblemData(number);
 
       const question = getSolutionForm({ number, problemData, language: lang });
+      console.log(question);
       resultConsole.appendLine("질문 생성 완료");
       resultConsole.appendLine("-".repeat(50));
 
