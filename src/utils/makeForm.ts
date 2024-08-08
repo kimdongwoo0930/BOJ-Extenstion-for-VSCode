@@ -219,7 +219,7 @@ export const juseokForm = (
    */
   if (lang === "py") {
     return `#=====================================================================
-#   ${number}번: ${problemData.title}                   
+#   ${number}번:    ${problemData.title}                   
 #   @date:   ${date}              
 #   @link:   https://www.acmicpc.net/problem/${number}  
 #   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
@@ -229,13 +229,14 @@ export const juseokForm = (
 import sys;
 
 input = sys.stdin.readline
+
 `;
   } else if (lang === "cpp") {
     /**
      * @language C++
      */
     return `//=====================================================================
-//   ${number}번: ${problemData.title}                   
+//   ${number}번:    ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
 //   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
@@ -246,9 +247,10 @@ input = sys.stdin.readline
 using namespace std;
             
 int main() {
-  //  freopen("input.txt", "r", stdin);
-  //  BOJ: 테스트를 이용할때 위 코드로 입력을 받아주세요.
-              
+  int t;
+	cin >> t;
+
+  
   return 0;
 }
 `;
@@ -258,7 +260,7 @@ int main() {
      */
 
     return `//=====================================================================
-//   ${number}번: ${problemData.title}                   
+//   ${number}번:    ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
 //   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
@@ -279,7 +281,7 @@ public class Main {
      * @language C언어
      */
     return `//=====================================================================
-//   ${number}번: ${problemData.title}                   
+//   ${number}번:    ${problemData.title}                  
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
 //   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
@@ -291,19 +293,17 @@ public class Main {
 #include <string.h>
 
 int main() {
-
-  //  freopen("input.txt", "r", stdin);
-  //  BOJ: 테스트를 이용할때 위 코드로 입력을 받아주세요.
+  int T;
+  scanf("%d", &T);
               
   return 0;
 }
 `;
   } else if (lang === "js") {
-    if (platform === "Darwin") {
-      /**
-       * @language 자바스크립트 nodejs ( mac or windows )
-       */
-      return `//=====================================================================
+    /**
+     * @language 자바스크립트 nodejs ( mac or windows )
+     */
+    return `//=====================================================================
 //   ${number}번: ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
@@ -322,37 +322,165 @@ const fs = require("fs");
 const path = require("path");
 
 const inputFilePath = path.join(__dirname, "input.txt");
-let input = fs.readFileSync(inputFilePath).toString().split("\n");
+let input = fs.readFileSync(inputFilePath).toString().split("\\n");
 
 
 `;
-    } else {
-      /**
-       * @language 자바스크립트 nodejs ( Linux )
-       */
-      return `//=====================================================================
-//   ${number}번: ${problemData.title}                   
-//   @date:   ${date}              
-//   @link:   https://www.acmicpc.net/problem/${number}  
-//   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
-//   @Test:   코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
-//=====================================================================
-
-// 백준 제출전 입력코드를 아래 코드로 수정해주세요.
-// const input = require("fs").readFileSync("/dev/stdin").toString().split("\\n");
- 
-
-// node.js는 각각의 OS에서 같은 방법으로 테스트하기위해 input.txt를 통해 테스트를 진행합니다.
-// 테스트를 위해 아래 코드를 이용해 주세요.
-const fs = require("fs");
-const path = require("path");
-
-const inputFilePath = path.join(__dirname, "input.txt");
-let input = fs.readFileSync(inputFilePath).toString().split("\n");
-
-`;
-    }
   } else {
     return "";
+  }
+};
+
+export const ReadmeForm = (
+  number: string | undefined,
+  problemData: problemData
+) => {
+  const limitSection = problemData!.limit?.trim()
+    ? `제한 시간 : ${problemData!.limit!.split(" ")[0]} 초\n제한 메모리 : ${
+        problemData!.limit!.split(" ")[1]
+      } MB\n`
+    : "";
+
+  const testCases =
+    problemData!.testCaseInputs && problemData!.testCaseOutputs
+      ? problemData!.testCaseInputs
+          .map((input, index) => {
+            const output = problemData!.testCaseOutputs![index];
+            return `
+### 예제 입력 ${index + 1}
+
+\`\`\`
+${input}
+\`\`\`
+
+### 예제 출력 ${index + 1}
+
+\`\`\`
+${output}
+\`\`\`
+          `;
+          })
+          .join("\n")
+      : "";
+
+  return `# ${number}번: ${problemData!.title}
+
+## 문제 설명
+
+${problemData!.description}
+
+## 입력 형식
+
+${problemData!.input}
+
+## 출력 형식
+
+${problemData!.output}
+
+## 예제
+${testCases}
+
+${limitSection ? "## 제한" : ""}
+${limitSection}
+
+## 추가 테스트 케이스
+
+추가로 테스트 하고 싶은 케이스를 적고 정리해 보세요.
+
+### 추가 입력 1
+
+\`\`\`
+<입력값>
+\`\`\`
+
+### 추가 출력 1
+
+\`\`\`
+<출력값>
+\`\`\`
+
+### 추가 입력 2
+
+\`\`\`
+<입력값>
+\`\`\`
+
+### 추가 출력 2
+
+\`\`\`
+<출력값>
+\`\`\`
+  `;
+};
+
+/**
+ * @title 최대 길이를 받아 문구를 가운데에 표시해주는 함수
+ * @param text 문구
+ * @param maxWidth 최대 길이
+ * @returns
+ */
+export function centerText(text: string, maxWidth: number) {
+  const padding = Math.max(0, maxWidth - text.length);
+  const paddingLeft = Math.floor(padding / 2);
+  const paddingRight = padding - paddingLeft;
+  return (
+    "=".repeat(paddingLeft - 1) +
+    " " +
+    text +
+    " " +
+    "=".repeat(paddingRight - 1)
+  );
+}
+
+// =================================================================
+/**
+ * @title 확장자에 따른 입력방식 설명
+ */
+export const InputForm = (lang: string) => {
+  switch (lang) {
+    case "c":
+      return `#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int main() {
+  int T;
+  scanf("%d", &T);
+              
+  return 0;
+}`;
+    case "cpp":
+      return `#include <iostream>
+using namespace std;
+            
+int main() {
+  int t;
+	cin >> t;
+
+  
+  return 0;
+}`;
+    case "java":
+      return `import java.util.*;
+
+public class Main {
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+  }
+
+}`;
+    case "js":
+      return `
+const fs = require("fs");
+const path = require("path");
+
+const inputFilePath = path.join(__dirname, "input.txt");
+let input = fs.readFileSync(inputFilePath).toString().split("\n");
+`;
+    case "py":
+      return `
+import sys;
+
+input = sys.stdin.readline`;
   }
 };

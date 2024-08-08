@@ -22,6 +22,7 @@ export const InputProblemNumber = (context: vscode.ExtensionContext) => {
             placeHolder: 'ex) 1001',
         })
         .then((problemNumber) => {
+          
             // 먼저 입력받은 값의 검증해야한다.
             if (ProblemNumberInputValidation(problemNumber)) {
                 InputLanguage(context, problemNumber);
