@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(winget:*)",
-      "Bash(gcc:*)",
-      "Bash(pacman:*)"
-    ]
-  }
-}
