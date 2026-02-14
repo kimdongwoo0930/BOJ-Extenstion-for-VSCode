@@ -2,7 +2,7 @@
   "name": "boj-extension-for-vscode",
   "displayName": "BOJ Extension for VSCode",
   "description": "백준 온라인 문제를 VS Code에서 풀어보자.",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "author": "Dong",
   "publisher": "Dong",
   "icon": "images/LOGO.jpg",
@@ -106,14 +106,17 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "@vscode/vsce": "^3.7.1",
     "axios": "^1.7.2",
     "bufferutil": "^4.0.8",
     "cheerio": "^1.0.0-rc.12",
+    "child_process": "^1.0.2",
     "dotenv": "^16.4.5",
+    "generator-code": "^1.11.17",
     "jsdom": "^24.1.0",
     "rss-parser": "^3.13.0",
     "utf-8-validate": "^6.0.4",
     "xmldom": "^0.6.0",
-    "child_process": "^1.0.2"
+    "yo": "^6.0.0"
   }
 }

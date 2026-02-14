@@ -1,16 +1,34 @@
 .vscode/**
 .vscode-test/**
+.github/**
+
+# 빌드 결과(dist)는 포함해야 하므로 out은 제외(있으면)
 out/**
-node_modules/**
 src/**
+test/**
+Test/**
+
+# 설정/개발 파일
 .gitignore
 .yarnrc
 webpack.config.js
 vsc-extension-quickstart.md
 **/tsconfig.json
 **/.eslintrc.json
-**/*.map
-**/*.ts
 **/.vscode-test.*
 
-Sample
+# 타입스크립트/소스맵
+**/*.ts
+**/*.map
+
+# 문서/샘플
+Sample/**
+개발로그.md
+Test List*.md
+
+# 생성된 패키지
+*.vsix
+Test*.md
+Sample/**
+
+node_modules/**
