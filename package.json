@@ -1,6 +1,6 @@
 {
   "name": "boj-extension-for-vscode",
-  "displayName": "BOJ Extension for VSCode - Beta",
+  "displayName": "BOJ Extension for VSCode",
   "description": "백준 온라인 문제를 VS Code에서 풀어보자.",
   "version": "0.1.0",
   "author": "Dong",
@@ -9,16 +9,36 @@
   "engines": {
     "vscode": "^1.91.0"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kimdongwoo0930/BOJ-Extenstion-for-VSCode"
+  },
+  "homepage": "https://github.com/kimdongwoo0930/BOJ-Extenstion-for-VSCode",
+  "bugs": {
+    "url": "https://github.com/kimdongwoo0930/BOJ-Extenstion-for-VSCode/issues"
+  },
   "categories": [
     "Other"
   ],
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
-    "configuration": {
-      "type": "object",
-      "title": "Your Extension Settings",
-      "properties": {}
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "boj",
+          "title": "BOJ",
+          "icon": "images/logo.png"
+        }
+      ]
+    },
+    "views": {
+      "boj": [
+        {
+          "id": "bojView",
+          "name": "BOJ"
+        }
+      ]
     },
     "commands": [
       {
@@ -38,18 +58,19 @@
         "title": "BOJ: 현재 문제 보기"
       },
       {
-        "command": "boj-extension-for-vscode.gptHint",
-        "title": "BOJ: 힌트 보기"
-      },
-      {
-        "command": "boj-extension-for-vscode.gptSolution_fast",
-        "title": "BOJ: 해설 보기"
-      },
-      {
-        "command": "boj-extension-for-vscode.gptAnswer",
-        "title": "BOJ: 코드 최적화 하기  ( 개발중 )"
+        "command": "boj.refreshView",
+        "title": "Refresh"
       }
-    ]
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "boj.refreshView",
+          "when": "view == bojView",
+          "group": "navigation"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run package",
@@ -83,13 +104,13 @@
     "bufferutil": "^4.0.8",
     "canvas": "^2.11.2",
     "cheerio": "^1.0.0-rc.12",
-    "child_process": "^1.0.2",
     "dotenv": "^16.4.5",
     "jsdom": "^24.1.0",
     "openai": "^4.54.0",
     "openapi": "^1.0.1",
     "rss-parser": "^3.13.0",
     "utf-8-validate": "^6.0.4",
-    "xmldom": "^0.6.0"
+    "xmldom": "^0.6.0",
+    "child_process": "^1.0.2"
   }
 }

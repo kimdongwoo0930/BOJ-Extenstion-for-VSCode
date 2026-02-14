@@ -3,7 +3,7 @@ import path from "path";
 import { ProblemNumberInputValidation } from "../types/validation";
 import { problemData } from "../types/problemData";
 import { getProblemData } from "../utils/getProblemData";
-import { showProblem, showProblemToHtml } from "./showProblemDocument";
+import { showProblem, showProblemToHtml } from "./ShowProblemDocument";
 import { getHtmlContent, getHtmlFilesInSameFolder } from "../utils/getHtml";
 
 /**
@@ -19,6 +19,17 @@ export const showDocumentWithoutFile = (context: vscode.ExtensionContext) => {
       placeHolder: "ex) 1001",
     })
     .then(async (number) => {
+      // ✅ ESC 취소
+      if (number === undefined) {
+        return;
+      }
+
+      // ✅ 공백 입력도 취소처럼 처리하고 싶으면(선택)
+      number = number.trim();
+      if (number.length === 0) {
+        return;
+      }
+
       if (!ProblemNumberInputValidation(number)) {
         vscode.window.showErrorMessage("올바른 번호를 입력해주세요.");
         showDocumentWithoutFile(context);
@@ -45,8 +56,10 @@ export const showDocument = async (context: vscode.ExtensionContext) => {
     return;
   }
   const document = editor.document;
-  const filePath = document.fileName;
-  const folderPath = path.dirname(filePath);
+  if (document.isUntitled) {
+    vscode.window.showErrorMessage("파일을 저장한 뒤 다시 실행해 주세요.");
+    return;
+  }
   // 같은 폴더에 있는 HTML 파일 찾기
   const htmlFiles = getHtmlFilesInSameFolder(document);
   if (htmlFiles.length === 0) {
@@ -58,12 +71,12 @@ export const showDocument = async (context: vscode.ExtensionContext) => {
   // console.log(htmlFilePath);
 
   try {
-    const htmlFilePath = htmlFiles[0];
     const htmlContent = await getHtmlContent(htmlFilePath);
     // console.log(htmlContent);
 
     showProblemToHtml(htmlContent, context);
   } catch (error) {
     vscode.window.showErrorMessage(`HTML을 가져오는데 실패했습니다.`);
+    console.error(error);
   }
 };

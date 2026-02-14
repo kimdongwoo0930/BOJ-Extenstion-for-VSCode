@@ -133,7 +133,7 @@ export const ProblemHtmlForm = (problemData: problemData) => {
           ? ""
           : `${problemData.testCaseExplains![index]}`
       }
-    `
+    `,
       )
       .join("")}
   </section>
@@ -208,7 +208,7 @@ function getThemeStyles() {
 export const juseokForm = (
   lang: string,
   problemData: problemData,
-  number: string
+  number: string,
 ): string => {
   const date = new Date().toISOString().split("T")[0];
   // Linux : 리눅스 / Darwin : 맥 / Windows_NT : 윈도우
@@ -312,18 +312,15 @@ int main() {
 //=====================================================================
 
 
-// 백준 제출전 입력코드를 아래 코드로 수정해주세요.
-// const input = require("fs").readFileSync("/dev/stdin").toString().split("\\n");
- 
-
-// node.js는 각각의 OS에서 같은 방법으로 테스트하기위해 input.txt를 통해 테스트를 진행합니다.
-// 테스트를 위해 아래 코드를 이용해 주세요.
 const fs = require("fs");
 const path = require("path");
 
 const inputFilePath = path.join(__dirname, "input.txt");
-let input = fs.readFileSync(inputFilePath).toString().split("\\n");
 
+// 줄 단위로 받기
+const input = fs.readFileSync(inputFilePath, "utf8")
+                .trim()
+                .split(/\r?\n/);
 
 `;
   } else {
@@ -333,7 +330,7 @@ let input = fs.readFileSync(inputFilePath).toString().split("\\n");
 
 export const ReadmeForm = (
   number: string | undefined,
-  problemData: problemData
+  problemData: problemData,
 ) => {
   const limitSection = problemData!.limit?.trim()
     ? `제한 시간 : ${problemData!.limit!.split(" ")[0]} 초\n제한 메모리 : ${

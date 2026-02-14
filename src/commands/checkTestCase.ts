@@ -3,6 +3,7 @@ import * as vscode from "vscode";
 import { spawn, execSync } from "child_process";
 import { getProblemData } from "../utils/getProblemData";
 import { problemData } from "../types/problemData";
+import { performance } from "perf_hooks";
 import * as fs from "fs";
 import * as os from "os";
 import { centerText } from "../utils/makeForm";
@@ -56,21 +57,31 @@ export const checkTestCase = async (context: vscode.ExtensionContext) => {
       // 메세지 띄우기
       const message_1 = centerText(
         `${number}번: ${problemData!.title}`,
-        maxWidth
+        maxWidth,
       );
       resultConsole.appendLine(message_1);
 
+      let passCount = 0;
+      const totalCount = problemData!.testCaseInputs!.length;
+
       for (let i = 0; i < problemData.testCaseInputs!.length; i++) {
-        await runCommand(
+        const ok = await runCommand(
           lang,
           filePath,
           problemData!.testCaseInputs![i],
           problemData!.testCaseOutputs![i],
           resultConsole,
-          i
+          i,
         );
+        if (ok) passCount++;
       }
       resultConsole.show(true);
+      resultConsole.appendLine("─".repeat(50));
+      resultConsole.appendLine("📊 RESULT SUMMARY");
+      resultConsole.appendLine(
+        `✔ ${passCount} / ${totalCount} Tests Passed (${((passCount / totalCount) * 100).toFixed(1)}%)`,
+      );
+      resultConsole.appendLine("─".repeat(50));
 
       // 이제 작성한 코드 테스트를 하는 함수를 작성하면 된다.
     } else {
@@ -100,9 +111,9 @@ const runCommand = async (
   input: string,
   resultOutput: string,
   resultConsole: vscode.OutputChannel,
-  index: number
-) => {
-  return new Promise<void>((resolve, rejects) => {
+  index: number,
+): Promise<boolean> => {
+  return new Promise<boolean>((resolve, rejects) => {
     let outputs = "";
     if (lang === "js") {
       writeInputTXT(input, filePath, lang);
@@ -128,40 +139,42 @@ const runCommand = async (
       const errorOutput =
         typeof data === "string" ? data.trim() : data.toString("utf-8").trim();
 
-      resultConsole.appendLine("-".repeat(50));
-      resultConsole.appendLine(`Test Case ${index + 1}: 오류 ⚠️`);
-      resultConsole.appendLine("-".repeat(50));
-      resultConsole.appendLine(`오류 출력: ${errorOutput}`);
-      resultConsole.appendLine("-".repeat(50));
+      resultConsole.appendLine("═".repeat(50));
+      resultConsole.appendLine(`[ Test Case ${index + 1} ]  ⚠️ RUNTIME ERROR`);
+      resultConsole.appendLine("─".repeat(50));
+      resultConsole.appendLine("오류 내용:");
+      resultConsole.appendLine(errorOutput);
+      resultConsole.appendLine("═".repeat(50));
     });
 
     process.on("close", (code: number) => {
       const endTime = performance.now();
-      const processingTime = ((endTime - startTime) / 1000).toFixed(2);
-      const output = outputs.trim();
-      if (code === 0) {
-        resultConsole.appendLine("-".repeat(50));
-        resultConsole.appendLine(
-          `Test Case ${index + 1}: ${
-            output.replace(/\r?\n|\r/g, " ") ===
-            resultOutput.trim().replace(/\n/g, " ")
-              ? "성공 ✅"
-              : "실패 ❌"
-          }`
-        );
-        resultConsole.appendLine("-".repeat(50));
-        resultConsole.appendLine(`입력: ${input.trim().replace(/\n/g, " ")}`);
-        resultConsole.appendLine(
-          `예상 출력: ${resultOutput.trim().replace(/\n/g, " ")}`
-        );
-        resultConsole.appendLine(
-          `실제 출력: ${output.replace(/\r?\n|\r/g, " ")}`
-        );
-        resultConsole.appendLine("-".repeat(50));
-        resultConsole.appendLine(`걸린 시간: ${processingTime}ms`);
-        resultConsole.appendLine("-".repeat(50));
-      }
-      resolve();
+
+      // ✅ 시간 단위 버그 수정: ms 그대로 출력
+      const processingTime = (endTime - startTime).toFixed(2);
+
+      const actual = outputs.replace(/\r?\n|\r/g, " ").trim();
+      const expected = resultOutput
+        .trim()
+        .replace(/\r?\n|\r/g, " ")
+        .trim();
+      const isPass = code === 0 && actual === expected;
+
+      resultConsole.appendLine("═".repeat(50));
+      resultConsole.appendLine(
+        `[ Test Case ${index + 1} ]  ${isPass ? "✅ PASS" : "❌ FAIL"}`,
+      );
+      resultConsole.appendLine("─".repeat(50));
+      resultConsole.appendLine(
+        `입력       : ${input.trim().replace(/\r?\n|\r/g, " ")}`,
+      );
+      resultConsole.appendLine(`예상 출력  : ${expected}`);
+      resultConsole.appendLine(`실제 출력  : ${actual}`);
+      resultConsole.appendLine("─".repeat(50));
+      resultConsole.appendLine(`실행 시간  : ${processingTime} ms`);
+      resultConsole.appendLine("═".repeat(50));
+
+      resolve(isPass); // ✅ 통과 여부 반환
     });
 
     // 비동기 작업을 동기처럼 처리
@@ -186,48 +199,56 @@ const runCommand = async (
  * @returns - 생성된 프로세스 객체
  */
 const processSetting = (lang: string, filePath: string) => {
-  // Linux : 리눅스 / Darwin : 맥 / Windows_NT : 윈도우
-  const platform = os.type();
-  if (lang === "py") {
-    if (platform === "Windows_NT") {
-      return spawn("python", [filePath]);
-    } else {
-      return spawn("python3", [filePath]);
-    }
-  } else if (lang === "c") {
-    const file = filePath.replace(/\.[^/.]+$/, "");
-    try {
-      execSync(`gcc "${filePath}" -o "${file}" -std=gnu11`);
-      // execSync(`chmod +x ${filePath}/${file}"`);
-      if (platform === "Windows_NT" || platform === "Linux") {
-        return spawn("./main", { cwd: path.dirname(filePath) });
+  const cwd = path.dirname(filePath);
+  const isWin = os.platform() === "win32";
+
+  try {
+    switch (lang) {
+      case "py": {
+        // Windows: python / mac+linux: python3
+        const py = isWin ? "python" : "python3";
+        return spawn(py, [filePath], { cwd });
       }
-      return spawn(`./${file}`);
-    } catch (error) {
-      new Error(`컴파일 오류: ${error}`);
-    }
-  } else if (lang === "cpp") {
-    const file = filePath.slice(0, filePath.length - 4);
-    try {
-      execSync(`g++ -std=c++17 "${filePath}" -o "${file}"`);
-      if (platform === "Windows_NT" || platform === "Linux") {
-        return spawn("./main", { cwd: path.dirname(filePath) });
+
+      case "js": {
+        return spawn("node", [filePath], { cwd });
       }
-      return spawn(`./${file}`);
-    } catch (error) {
-      new Error(`컴파일 오류: ${error}`);
+
+      case "c": {
+        const exeName = isWin ? "main.exe" : "main";
+        execSync(`gcc "${filePath}" -o "${exeName}" -std=gnu11`, { cwd });
+        return spawn(isWin ? exeName : `./${exeName}`, [], { cwd });
+      }
+
+      case "cpp": {
+        const exeName = isWin ? "main.exe" : "main";
+        execSync(`g++ -std=c++17 "${filePath}" -o "${exeName}"`, { cwd });
+        return spawn(isWin ? exeName : `./${exeName}`, [], { cwd });
+      }
+
+      case "java": {
+        // javac로 컴파일 후 class 실행
+        const cwd = path.dirname(filePath);
+        const fileName = path.basename(filePath); // Main.java
+        const className = path.basename(filePath, ".java"); // Main
+
+        try {
+          // 1️⃣ cwd 안에서 컴파일
+          execSync(`javac "${fileName}"`, { cwd });
+
+          // 2️⃣ cwd 기준으로 실행 (classpath는 현재 디렉토리)
+          return spawn("java", [className], { cwd });
+        } catch (error) {
+          throw new Error(`Java 컴파일/실행 오류: ${String(error)}`);
+        }
+      }
+
+      default:
+        throw new Error(`Unsupported language: ${lang}`);
     }
-  } else if (lang === "java") {
-    const dirName = path.dirname(filePath);
-    try {
-      return spawn(`java`, ["-cp", dirName, filePath]);
-    } catch (error) {
-      new Error(`컴파일 오류: ${error}`);
-    }
-  } else if (lang === "js") {
-    return spawn("node", [filePath]);
-  } else {
-    new Error(`Unsupported language: ${lang}`);
+  } catch (error) {
+    // ⚠️ 기존 코드처럼 new Error만 만들면 아무 일도 안 생김 → throw 해야 위에서 잡힘
+    throw new Error(`컴파일/실행 오류: ${String(error)}`);
   }
 };
 
@@ -264,7 +285,7 @@ const getHtmlFileNames = (folderPath: string): string[] => {
 
 // 현재 파일의 폴더 내 HTML 파일 이름을 가져오는 함수
 export const getHtmlFilesInSameFolder = (
-  document: vscode.TextDocument
+  document: vscode.TextDocument,
 ): string[] => {
   const folderPath = getFolderPath(document.fileName);
   return getHtmlFileNames(folderPath);
