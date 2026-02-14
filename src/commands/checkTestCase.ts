@@ -227,21 +227,27 @@ const processSetting = (lang: string, filePath: string) => {
       }
 
       case "java": {
-        // javac로 컴파일 후 class 실행
-        const cwd = path.dirname(filePath);
-        const fileName = path.basename(filePath); // Main.java
-        const className = path.basename(filePath, ".java"); // Main
+  // javac로 컴파일 후 class 실행
+  const fileName = path.basename(filePath);
+  const className = path.basename(filePath, ".java");
 
-        try {
-          // 1️⃣ cwd 안에서 컴파일
-          execSync(`javac "${fileName}"`, { cwd });
+  try {
+    // ✅ UTF-8 인코딩 명시
+    execSync(`javac -encoding UTF-8 "${fileName}"`, { 
+      cwd,
+      encoding: 'utf-8',
+      windowsHide: true
+    });
 
-          // 2️⃣ cwd 기준으로 실행 (classpath는 현재 디렉토리)
-          return spawn("java", [className], { cwd });
-        } catch (error) {
-          throw new Error(`Java 컴파일/실행 오류: ${String(error)}`);
-        }
-      }
+    return spawn("java", [className], { 
+      cwd,
+      shell: isWin
+    });
+  } catch (error: any) {
+    const errorMsg = error.stderr?.toString() || error.message || String(error);
+    throw new Error(`Java 컴파일 오류:\n${errorMsg}`);
+  }
+}
 
       default:
         throw new Error(`Unsupported language: ${lang}`);
