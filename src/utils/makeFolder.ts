@@ -25,12 +25,12 @@ export const makeFolder = async (
   context: vscode.ExtensionContext,
 ) => {
   let selectedFolderPath = folder[0].fsPath;
-  const platform = os.type();
+  const safeTitle = problemData!.title
+    .replace(/[<>:"/\\|?*]/g, "") // Windows 금지 문자 제거
+    .replace(/\s+/g, " ") // 공백 정리
+    .trim();
 
-  const folderName =
-    platform !== "Windows_NT"
-      ? `${number}번: ${problemData!.title}`
-      : `${number}번 ${problemData!.title}`;
+  const folderName = `${number}번 - ${safeTitle}`;
 
   let newFolderPath = path.join(selectedFolderPath, folderName);
 

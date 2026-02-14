@@ -318,9 +318,7 @@ const path = require("path");
 const inputFilePath = path.join(__dirname, "input.txt");
 
 // 줄 단위로 받기
-const input = fs.readFileSync(inputFilePath, "utf8")
-                .trim()
-                .split(/\r?\n/);
+const input = fs.readFileSync(inputFilePath, "utf8").trim().split(/\r?\n/);
 
 `;
   } else {
