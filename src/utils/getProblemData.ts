@@ -19,8 +19,8 @@ export const getProblemData = async (number: string | undefined): Promise<proble
             if ($) {
                 // 문제 제목
                 const title: string = $('#problem_title').text();
-                // 문제 정보
-                const info = $('#problem-info').html();
+                // 문제 정보 (outerHTML로 <table> 태그 포함)
+                const info = $('#problem-info').prop('outerHTML') || $('#problem-info').html();
                 // 문제 본문
                 const description = $('#problem_description').html()!.replace(/\t/g, '');
 

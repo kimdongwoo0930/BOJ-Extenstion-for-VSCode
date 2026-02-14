@@ -227,27 +227,28 @@ const processSetting = (lang: string, filePath: string) => {
       }
 
       case "java": {
-  // javac로 컴파일 후 class 실행
-  const fileName = path.basename(filePath);
-  const className = path.basename(filePath, ".java");
+        // javac로 컴파일 후 class 실행
+        const fileName = path.basename(filePath);
+        const className = path.basename(filePath, ".java");
 
-  try {
-    // ✅ UTF-8 인코딩 명시
-    execSync(`javac -encoding UTF-8 "${fileName}"`, { 
-      cwd,
-      encoding: 'utf-8',
-      windowsHide: true
-    });
+        try {
+          // ✅ UTF-8 인코딩 명시
+          execSync(`javac -encoding UTF-8 "${fileName}"`, {
+            cwd,
+            encoding: "utf-8",
+            windowsHide: true,
+          });
 
-    return spawn("java", [className], { 
-      cwd,
-      shell: isWin
-    });
-  } catch (error: any) {
-    const errorMsg = error.stderr?.toString() || error.message || String(error);
-    throw new Error(`Java 컴파일 오류:\n${errorMsg}`);
-  }
-}
+          return spawn("java", [className], {
+            cwd,
+            shell: isWin,
+          });
+        } catch (error: any) {
+          const errorMsg =
+            error.stderr?.toString() || error.message || String(error);
+          throw new Error(`Java 컴파일 오류:\n${errorMsg}`);
+        }
+      }
 
       default:
         throw new Error(`Unsupported language: ${lang}`);
@@ -256,18 +257,6 @@ const processSetting = (lang: string, filePath: string) => {
     // ⚠️ 기존 코드처럼 new Error만 만들면 아무 일도 안 생김 → throw 해야 위에서 잡힘
     throw new Error(`컴파일/실행 오류: ${String(error)}`);
   }
-};
-
-// =================================================================
-
-const resultMessage = (index: number, resultConsole: vscode.OutputChannel) => {
-  // 테스트 케이스 결과 메세지
-  /**
-   * success
-   */
-  /**
-   * fail
-   */
 };
 
 // =================================================================
@@ -325,13 +314,3 @@ const writeInputTXT = async (input: string, filePath: string, lang: string) => {
     // console.error("Error writing to input.txt:", err);
   }
 };
-
-// const getFolderPath = () => {
-//   if (lang === "js") {
-//     return filePath.replace(/index\.js$/, "");
-//   } else if (lang === "c") {
-//     return filePath.replace(/main\.c$/, "");
-//   } else if (lang === "cpp") {
-//     return filePath.replace(/main\.cpp$/, "");
-//   }
-// };

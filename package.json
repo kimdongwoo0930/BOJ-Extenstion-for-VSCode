@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "author": "Dong",
   "publisher": "Dong",
-  "icon": "images/logo.png",
+  "icon": "images/LOGO.jpg",
   "engines": {
     "vscode": "^1.91.0"
   },
@@ -27,8 +27,8 @@
       "activitybar": [
         {
           "id": "boj",
-          "title": "BOJ",
-          "icon": "images/logo.png"
+          "title": "BOJ Extension for VSCode",
+          "icon": "images/icon.svg"
         }
       ]
     },
@@ -40,6 +40,12 @@
         }
       ]
     },
+    "viewsWelcome": [
+      {
+        "view": "bojView",
+        "contents": "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n📝 문제 생성\n\n[$(add) 새 문제 시작하기](command:boj-extension-for-vscode.getProblemByNumber)\n\n문제 번호만 입력하면 폴더+파일 자동 생성\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n👁️ 빠른 미리보기\n\n[$(eye) 문제만 먼저 보기](command:boj-extension-for-vscode.showProblemWithdoutFile)\n\n파일 생성 없이 문제 내용만 확인\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n🧪 코드 테스트\n\n[$(beaker) 예제로 채점하기](command:boj-extension-for-vscode.checkTestCase)\n\n작성한 코드를 백준 예제로 자동 테스트\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n📂 작업 재개\n\n[$(file) 문제 다시 열기](command:boj-extension-for-vscode.showProblem)\n\n현재 작업 중인 문제 빠르게 확인\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+      }
+    ],
     "commands": [
       {
         "command": "boj-extension-for-vscode.getProblemByNumber",
@@ -105,8 +111,6 @@
     "cheerio": "^1.0.0-rc.12",
     "dotenv": "^16.4.5",
     "jsdom": "^24.1.0",
-    "openai": "^4.54.0",
-    "openapi": "^1.0.1",
     "rss-parser": "^3.13.0",
     "utf-8-validate": "^6.0.4",
     "xmldom": "^0.6.0",

@@ -13,10 +13,10 @@ export const ProblemHtmlForm = (problemData: problemData) => {
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <base href="https://www.acmicpc.net"> <!-- base url 설정 -->
+  <base href="https://www.acmicpc.net">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://ddo7jzca0m2vt.cloudfront.net;">
   <title>${problemData.title}</title>
   <link rel="stylesheet" href="https://ddo7jzca0m2vt.cloudfront.net/css/problem-font.css?version=20230101">
   <link rel="stylesheet" href="https://ddo7jzca0m2vt.cloudfront.net/unify/css/custom.css?version=20230101">
@@ -27,6 +27,20 @@ export const ProblemHtmlForm = (problemData: problemData) => {
     h2 { font-size: 24px; }
     h3 { font-size: 20px; }
     ${getThemeStyles()}
+    table {
+      border-collapse: collapse;
+      margin: 20px 0;
+      width: 100%;
+    }
+    table td, table th {
+      border: 1px solid #ddd;
+      padding: 8px 12px;
+      text-align: left;
+    }
+    table th {
+      background-color: #f5f5f5;
+      font-weight: bold;
+    }
     .problem-section { margin-bottom: 30px; }
     .problem-text p { margin: 0; }
     .problem-text a { color: #007bff; }
@@ -34,44 +48,23 @@ export const ProblemHtmlForm = (problemData: problemData) => {
     .problem-io h3 { font-size: 20px; }
     .sample-container {
       display: flex;
-      gap: 16px; /* 예제와 예제 사이의 간격 설정 (원하는 크기로 조정) */
+      gap: 16px;
     }
     .sample-box {
-      flex: 1; /* 박스가 꽉 차도록 설정 */
+      flex: 1;
     }
     .hidden {
       display: none;
     }
   </style>
-  <script>
-    function updateTheme() {
-      const theme = ${JSON.stringify(createThemeMessage())};
-      vscode.postMessage(theme);
-    }            
-    function getLocalResourceUri(resourcePath) {
-      const onDiskPath = vscode.Uri.file(path.join(context.extensionPath, resourcePath));
-      const srcUri = panel.webview.asWebviewUri(onDiskPath);
-      return srcUri;
-    }
-  </script>
-  <script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-      tex2jax: {inlineMath: [['$','$'], ['\$begin:math:text$','\\$end:math:text$']]}
-    });
-  </script>
-  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 </head>
 <body>
   <h1 style="display:inline">
     ${problemData.title}
   </h1>
-  &nbsp;&nbsp;&nbsp;&nbsp;
-  <h3 style="display:inline">
-  </h3>
   <br>
-  <table>
-    ${problemData.info}
-  </table>
+  ${problemData.info}
   <section id="description" class="problem-section">
     <div class="headline">
       <h2>문제</h2>
@@ -167,12 +160,6 @@ export const ProblemHtmlForm = (problemData: problemData) => {
 </html>
 `;
 };
-
-// 웹뷰에 전달할 테마 정보를 포함한 메시지를 생성하는 함수
-function createThemeMessage() {
-  const currentTheme = vscode.window.activeColorTheme.kind;
-  return { theme: currentTheme };
-}
 
 function getThemeStyles() {
   // 현재 테마를 가져와서 해당 테마에 따른 스타일을 반환하는 함수
@@ -427,55 +414,3 @@ export function centerText(text: string, maxWidth: number) {
   );
 }
 
-// =================================================================
-/**
- * @title 확장자에 따른 입력방식 설명
- */
-export const InputForm = (lang: string) => {
-  switch (lang) {
-    case "c":
-      return `#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-int main() {
-  int T;
-  scanf("%d", &T);
-              
-  return 0;
-}`;
-    case "cpp":
-      return `#include <iostream>
-using namespace std;
-            
-int main() {
-  int t;
-	cin >> t;
-
-  
-  return 0;
-}`;
-    case "java":
-      return `import java.util.*;
-
-public class Main {
-  public static void main(String[] args) {
-    Scanner sc = new Scanner(System.in);
-  }
-
-}`;
-    case "js":
-      return `
-const fs = require("fs");
-const path = require("path");
-
-const inputFilePath = path.join(__dirname, "input.txt");
-let input = fs.readFileSync(inputFilePath).toString().split("\n");
-`;
-    case "py":
-      return `
-import sys;
-
-input = sys.stdin.readline`;
-  }
-};

@@ -6,8 +6,6 @@ import * as vscode from "vscode";
 import { InputProblemNumber } from "./commands/getProblemByNumber";
 import { checkTestCase } from "./commands/checkTestCase";
 import { showDocument, showDocumentWithoutFile } from "./commands/showDocument";
-import { getHint } from "./commands/GPT-API/hint";
-import { getSolution } from "./commands/GPT-API/solution";
 import { BojTreeProvider } from "./views/bojView";
 
 // 확장이 활성화되면 이 메서드가 호출됩니다
@@ -16,26 +14,6 @@ export function activate(context: vscode.ExtensionContext) {
   // 콘솔을 사용하여 진단 정보(console.log) 및 오류(console.error)를 출력합니다
   // 이 코드 라인은 내선번호가 활성화될 때 한 번만 실행됩니다
   console.log("익스텐션이 실행되었습니다.");
-
-  /**
-   * gpt 익스텐션을 위해 API키를 넣어야 한다.
-   */
-
-  // package.json 파일에 명령이 정의되었습니다
-  // 이제 registerCommand로 명령 구현을 제공합니다
-  // commandId 매개 변수는 package.json의 명령 필드와 일치해야 합니다
-  // const disposable = vscode.commands.registerCommand(
-  //   "boj-extension-for-vscode.helloWorld",
-  //   () => {
-  //     // 여기에 두는 코드는 명령이 실행될 때마다 실행됩니다
-  //     // 사용자에게 메시지 상자 표시
-  //     vscode.window.showInformationMessage(
-  //       "Hello World from BOJ Extension for VSCode!"
-  //     );
-  //   }
-  // );
-
-  // context.subscriptions.push(disposable);
 
   /**
    * 문제 번호를 통해서 가져오는 커멘드 함수
@@ -89,60 +67,12 @@ export function activate(context: vscode.ExtensionContext) {
    * GUI 생성
    */
   const provider = new BojTreeProvider();
-  context.subscriptions.push(
-    vscode.window.registerTreeDataProvider("bojView", provider),
-  );
-
-  context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider("bojDashboard", {
-      resolveWebviewView(webviewView) {
-        webviewView.webview.options = {
-          enableScripts: true,
-        };
-
-        webviewView.webview.html = `
-        <html>
-        <body>
-          <h2>BOJ Dashboard</h2>
-          <input placeholder="문제 번호 입력" />
-          <button>문제 생성</button>
-        </body>
-        </html>
-      `;
-      },
-    }),
-  );
 
   context.subscriptions.push(
     vscode.commands.registerCommand("boj.refreshView", () =>
       provider.refresh(),
     ),
   );
-
-  /**
-   * gpt 통해서 힌트 물어보기
-   */
-  // context.subscriptions.push(
-  //     vscode.commands.registerCommand('boj-extension-for-vscode.gptHint', () => {
-  //         getHint(context);
-  //     })
-  // );
-  // /**
-  //  * gpt 통해서 해설 물어보기 gpt-4o-mini
-  //  */
-  // context.subscriptions.push(
-  //     vscode.commands.registerCommand('boj-extension-for-vscode.gptSolution_fast', () => {
-  //         getSolution(context, 'gpt-4o-mini');
-  //     })
-  // );
-  /**
-   * gpt 통해서 해설 물어보기 gpt-4o
-   */
-  // context.subscriptions.push(
-  //     vscode.commands.registerCommand('boj-extension-for-vscode.gptSolution_slow', () => {
-  //         getSolution(context, 'gpt-4o');
-  //     })
-  // );
 }
 
 // 이 메소드는 해당 익스텐션이 종료될때 실행됩니다.
