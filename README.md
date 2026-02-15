@@ -45,6 +45,19 @@ BOJ Extension for VSCode는
 | 문제 자동 생성   | 번호 입력 시 폴더 + 템플릿 자동 생성 |
 | 테스트 자동 실행 | 예제 케이스 자동 채점                |
 
+---
+
+## 🖼️ Preview
+
+> 설치 후 Activity Bar에서 BOJ Extension을 실행하면 아래와 같은 GUI가 나타납니다.
+
+<p align="center">
+  <img src="images/image.png" width="650"/>
+</p>
+<br/>
+
+---
+
 ### 사용법
 
 **방법 1: 사이드바**
