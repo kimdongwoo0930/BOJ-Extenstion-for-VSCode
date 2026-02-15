@@ -1,8 +1,11 @@
 # BOJ Extension for VSCode
 
-[![Version](https://img.shields.io/badge/version-1.0-blue)]()
+[![Marketplace](https://img.shields.io/visual-studio-marketplace/v/Dong.boj-extension-for-vscode?label=Marketplace)](https://marketplace.visualstudio.com/items?itemName=Dong.boj-extension-for-vscode)
+[![Installs](https://img.shields.io/visual-studio-marketplace/i/Dong.boj-extension-for-vscode)](https://marketplace.visualstudio.com/items?itemName=Dong.boj-extension-for-vscode)
 [![Language](https://img.shields.io/badge/language-TypeScript-yellow)]()
 [![License](https://img.shields.io/badge/license-MIT-green)]()
+
+[VS Code Marketplace에서 설치하기](https://marketplace.visualstudio.com/items?itemName=Dong.boj-extension-for-vscode)
 
 BOJ Extension for VSCode는
 
@@ -30,7 +33,6 @@ BOJ Extension for VSCode는
 
 - VSCode Extension API 기반 Command 등록
 - 백준 문제 크롤링 및 파싱
-- GPT API 연동 (힌트 / 해설)
 - 로컬 테스트 실행 및 자동 채점
 
 ---
@@ -44,9 +46,15 @@ BOJ Extension for VSCode는
 
 ### 사용법
 
-1. Extension 설치 후 `Ctrl + Shift + P` 또는 `Command + Shift + P` 또는 `F1`을 눌러 `Command Palette`를 열고 `BOJ`를 검색하여 설치가 완료되었는지 확인해 주세요.
+**방법 1: 사이드바**
 
-2. 설치가 되었다면 커멘드를 입력해 사용하면 됩니다.
+1. 왼쪽 Activity Bar에서 BOJ 아이콘을 클릭합니다.
+2. 사이드바에서 원하는 기능 버튼을 클릭합니다.
+
+**방법 2: Command Palette**
+
+1. `Ctrl + Shift + P` (Mac: `Command + Shift + P`) 또는 `F1`을 눌러 Command Palette를 엽니다.
+2. `BOJ`를 검색하여 원하는 명령어를 실행합니다.
 
 <br/>
 
@@ -54,12 +62,13 @@ BOJ Extension for VSCode는
 
 ## 📌 Commands
 
-| Command                     | Description                              | Output              |
-| --------------------------- | ---------------------------------------- | ------------------- |
-| 🗂 파일 생성 및 문제 보기   | 문제 번호 입력 → 폴더 + 템플릿 자동 생성 | 개발 환경 자동 세팅 |
-| 👀 파일 생성 없이 문제 보기 | 문제 미리보기                            | 문제 설명 표시      |
-| 🔄 현재 문제 보기           | 현재 문제 다시 보기                      | 문제 설명 표시      |
-| 🧪 테스트                   | 예제 테스트 실행                         | 자동 채점 결과      |
+| Command                     | Description                               | Output              |
+| --------------------------- | ----------------------------------------- | ------------------- |
+| 🗂 파일 생성 및 문제 보기   | 문제 번호 입력 → 폴더 + 템플릿 자동 생성  | 개발 환경 자동 세팅 |
+| 👀 파일 생성 없이 문제 보기 | 문제 미리보기                             | 문제 설명 표시      |
+| 🔄 현재 문제 보기           | 현재 문제 다시 보기                       | 문제 설명 표시      |
+| 🧪 테스트                   | 예제 테스트 실행                          | 자동 채점 결과      |
+| 📤 제출                     | 주석 제거 후 코드 복사 + 제출 페이지 열기 | 백준 제출 페이지    |
 
 ## 🛠 Supported Languages
 
@@ -75,8 +84,10 @@ BOJ Extension for VSCode는
 
 ## 🚀 Roadmap
 
-- 사용자 편의 GUI 개발
-- 버그 수정
+- [x] 사용자 편의 GUI 개발 (사이드바 Welcome View)
+- [x] 버그 수정
+- [x] 제출 기능 추가
+- [x] Marketplace 배포
 
 ## 📝 Commit Message Convention
 

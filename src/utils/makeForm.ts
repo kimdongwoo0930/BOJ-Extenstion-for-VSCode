@@ -209,7 +209,7 @@ export const juseokForm = (
 #   ${number}번:    ${problemData.title}                   
 #   @date:   ${date}              
 #   @link:   https://www.acmicpc.net/problem/${number}  
-#   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
+#   @Note:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
 #   @Test:   코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 #=====================================================================
 
@@ -226,7 +226,7 @@ input = sys.stdin.readline
 //   ${number}번:    ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
-//   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
+//   @Note:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
 //   @Test:   코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 //=====================================================================
 
@@ -250,7 +250,7 @@ int main() {
 //   ${number}번:    ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
-//   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
+//   @Note:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
 //   @Test:   코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 //=====================================================================
 
@@ -271,7 +271,7 @@ public class Main {
 //   ${number}번:    ${problemData.title}                  
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
-//   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
+//   @Note:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
 //   @Test:   코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 //=====================================================================
 
@@ -294,7 +294,7 @@ int main() {
 //   ${number}번: ${problemData.title}                   
 //   @date:   ${date}              
 //   @link:   https://www.acmicpc.net/problem/${number}  
-//   @Motd:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
+//   @Note:   폴더 내부에 있는 파일을 삭제하거나 변경하지 말아주세요.
 //   @Test:   코드를 작성 후 "BOJ: 테스트"통해서 테스트를 해보세요.
 //=====================================================================
 

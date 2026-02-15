@@ -17,7 +17,7 @@ export const InputProblemNumber = (context: vscode.ExtensionContext) => {
   vscode.window
     .showInputBox({
       title: "문제 번호를 입력해 주세요.",
-      prompt: "숫자만 입력해주시면 됩니다.",
+      prompt: "숫자만 입력해주세요.",
       placeHolder: "ex) 1001",
     })
     .then((problemNumber) => {
@@ -42,34 +42,25 @@ export const InputProblemNumber = (context: vscode.ExtensionContext) => {
  * @param context vscode.ExtensionContext
  */
 // 만약 문제가 존재한다면 이제 사용할 언어의 확장자를 입력받아야한다.
-const InputLanguage = (context: vscode.ExtensionContext, number: string) => {
-  vscode.window
-    .showInputBox({
-      title: "사용할 언어의 확장자를 입력해주세요.",
-      prompt: "사용 가능 언어 : c, cpp, py, js, java",
-      placeHolder: "ex) py",
-    })
-    .then((languageInput) => {
-      // 똑같이 여기도 ESC나 빈칸을 경우 취소
-      if (languageInput === undefined) return;
+const InputLanguage = async (
+  context: vscode.ExtensionContext,
+  number: string,
+) => {
+  const languages = [
+    { label: "C", ext: "c" },
+    { label: "C++", ext: "cpp" },
+    { label: "JavaScript", ext: "js" },
+    { label: "Python", ext: "py" },
+    { label: "Java", ext: "java" },
+  ];
 
-      languageInput = languageInput?.trim();
-      if (
-        languageInput === "c" ||
-        languageInput === "cpp" ||
-        languageInput === "js" ||
-        languageInput === "py" ||
-        languageInput === "java"
-      ) {
-        // 이제 문제 파일 생성 함수 제작
-        getProblem(number, languageInput, context);
-      }
-      // 사용 가능한 확장자가 아닐경우
-      else {
-        vscode.window.showErrorMessage("사용 불가능한 확장자입니다.");
-        InputLanguage(context, number);
-      }
-    });
+  const selected = await vscode.window.showQuickPick(languages, {
+    placeHolder: "사용하실 언어를 선택해주세요.",
+  });
+
+  if (!selected) return;
+
+  getProblem(number, selected.ext, context);
 };
 // =================================================================================================
 

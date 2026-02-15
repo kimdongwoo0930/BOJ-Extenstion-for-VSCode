@@ -104,8 +104,6 @@ export const makeFolder = async (
  */
 
 const initializeNodeProject = async (projectPath: string) => {
-  console.log(projectPath);
-
   const packageJsonContent = {
     name: "algorithm",
     version: "1.0.0",
@@ -128,18 +126,14 @@ const initializeNodeProject = async (projectPath: string) => {
     vscode.window.showInformationMessage("package.json 파일이 생성되었습니다.");
 
     // npm install 실행
-    exec("npm install", { cwd: projectPath }, (error, stdout, stderr) => {
+    exec("npm install", { cwd: projectPath }, (error) => {
       if (error) {
         vscode.window.showErrorMessage("npm install에 실패했습니다.");
-        console.error(`exec error: ${error}`);
         return;
       }
       vscode.window.showInformationMessage("npm install이 완료되었습니다.");
-      console.log(`stdout: ${stdout}`);
-      console.error(`stderr: ${stderr}`);
     });
   } catch (err) {
-    console.error(err);
     vscode.window.showErrorMessage("Node.js 프로젝트 초기화에 실패했습니다.");
   }
 };

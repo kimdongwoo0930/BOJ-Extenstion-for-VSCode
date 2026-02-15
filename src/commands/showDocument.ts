@@ -1,5 +1,4 @@
 import * as vscode from "vscode";
-import path from "path";
 import { ProblemNumberInputValidation } from "../types/validation";
 import { problemData } from "../types/problemData";
 import { getProblemData } from "../utils/getProblemData";
@@ -77,6 +76,5 @@ export const showDocument = async (context: vscode.ExtensionContext) => {
     showProblemToHtml(htmlContent, context);
   } catch (error) {
     vscode.window.showErrorMessage(`HTML을 가져오는데 실패했습니다.`);
-    console.error(error);
   }
 };

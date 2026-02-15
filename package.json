@@ -2,7 +2,7 @@
   "name": "boj-extension-for-vscode",
   "displayName": "BOJ Extension for VSCode",
   "description": "백준 온라인 문제를 VS Code에서 풀어보자.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Dong",
   "publisher": "Dong",
   "icon": "images/LOGO.jpg",
@@ -43,7 +43,7 @@
     "viewsWelcome": [
       {
         "view": "bojView",
-        "contents": "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n📝 문제 생성\n\n[$(add) 새 문제 시작하기](command:boj-extension-for-vscode.getProblemByNumber)\n\n문제 번호만 입력하면 폴더+파일 자동 생성\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n👁️ 빠른 미리보기\n\n[$(eye) 문제만 먼저 보기](command:boj-extension-for-vscode.showProblemWithdoutFile)\n\n파일 생성 없이 문제 내용만 확인\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n🧪 코드 테스트\n\n[$(beaker) 예제로 채점하기](command:boj-extension-for-vscode.checkTestCase)\n\n작성한 코드를 백준 예제로 자동 테스트\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n📂 작업 재개\n\n[$(file) 문제 다시 열기](command:boj-extension-for-vscode.showProblem)\n\n현재 작업 중인 문제 빠르게 확인\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        "contents": "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n📝 문제 생성\n\n[$(add) 새 문제 시작하기](command:boj-extension-for-vscode.getProblemByNumber)\n\n문제 번호만 입력하면 폴더 + 파일 자동 생성\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n👁️ 빠른 미리보기\n\n[$(eye) 문제만 먼저 보기](command:boj-extension-for-vscode.showProblemWithdoutFile)\n\n파일 생성 없이 문제 내용만 확인\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n🧪 코드 테스트\n\n[$(beaker) 예제로 채점하기](command:boj-extension-for-vscode.checkTestCase)\n\n작성한 코드를 백준 예제로 자동 테스트\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n📂 작업 재개\n\n[$(file) 문제 다시 열기](command:boj-extension-for-vscode.showProblem)\n\n현재 작업 중인 문제 빠르게 확인\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n🚀 제출\n\n[$(cloud-upload) 제출하기](command:boj-extension-for-vscode.submit)\n\n코드를 백준에 제출\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
       }
     ],
     "commands": [
@@ -56,7 +56,7 @@
         "title": "BOJ: 테스트"
       },
       {
-        "command": "boj-extension-for-vscode.showProblemWithdoutFile",
+        "command": "boj-extension-for-vscode.showProblemWithoutFile",
         "title": "BOJ: 파일 생성없이 문제 보기"
       },
       {
@@ -64,8 +64,8 @@
         "title": "BOJ: 현재 문제 보기"
       },
       {
-        "command": "boj.refreshView",
-        "title": "Refresh"
+        "command": "boj-extension-for-vscode.submit",
+        "title": "BOJ: 정답 제출 하기"
       }
     ],
     "menus": {
