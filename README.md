@@ -2,10 +2,11 @@
 
 [![Marketplace](https://img.shields.io/visual-studio-marketplace/v/Dong.boj-extension-for-vscode?label=Marketplace)](https://marketplace.visualstudio.com/items?itemName=Dong.boj-extension-for-vscode)
 [![Installs](https://img.shields.io/visual-studio-marketplace/i/Dong.boj-extension-for-vscode)](https://marketplace.visualstudio.com/items?itemName=Dong.boj-extension-for-vscode)
+[![Open VSX](https://img.shields.io/open-vsx/v/Dong/boj-extension-for-vscode?label=Open%20VSX)](https://open-vsx.org/extension/Dong/boj-extension-for-vscode)
 [![Language](https://img.shields.io/badge/language-TypeScript-yellow)]()
 [![License](https://img.shields.io/badge/license-MIT-green)]()
 
-[VS Code Marketplace에서 설치하기](https://marketplace.visualstudio.com/items?itemName=Dong.boj-extension-for-vscode)
+[VS Code Marketplace에서 설치하기](https://marketplace.visualstudio.com/items?itemName=Dong.boj-extension-for-vscode) | [Open VSX에서 설치하기](https://open-vsx.org/extension/Dong/boj-extension-for-vscode)
 
 BOJ Extension for VSCode는
 
