@@ -96,12 +96,6 @@ BOJ Extension for VSCode는
 
 <br/>
 
-## 🚀 Roadmap
-
-- [x] 사용자 편의 GUI 개발 (사이드바 Welcome View)
-- [x] 버그 수정
-- [x] 제출 기능 추가
-- [x] Marketplace 배포
 
 ## 📝 Commit Message Convention
 
@@ -114,6 +108,11 @@ BOJ Extension for VSCode는
 | docs     | 문서 수정             | README, 주석 변경       | docs: README 사용법 추가                   |
 | chore    | 기타 작업             | 설정, 파일명 변경 등    | chore: svg 파일 경로 수정                  |
 | perf     | 성능 개선             | 속도, 최적화 작업       | perf: icon 렌더링 최적화                   |
+
+> 💡 **Java / Python 사용자라면?**  
+> IntelliJ IDEA 또는 PyCharm 환경에서도 BOJ Assistant를 사용할 수 있습니다.  
+> [👉 JetBrains Marketplace에서 설치하기](https://plugins.jetbrains.com/plugin/30420)
+
 
 ### 피드백 및 버그 리포트
 
