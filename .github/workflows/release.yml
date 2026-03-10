@@ -27,10 +27,7 @@ jobs:
         run: vsce package
 
       - name: Upload Release Asset
-        uses: softprops/action-gh-release@v2
-        with:
-          files: "*.vsix"
-          fail_on_unmatched_files: false
-          append_body: false
+        run: |
+          gh release upload ${{ github.event.release.tag_name }} *.vsix --clobber
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
